@@ -1,0 +1,45 @@
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: aqua;
+    padding: 0;
+    margin: 0;
+}
+
+header{
+    display: flex;
+    justify-content: space-between;
+    height: 75px;
+    background-color: red;
+}
+
+.hgauche img{
+    width: 75px;
+    height: 75px;
+    border-radius: 30px ;
+}
+
+.hdroite ul{
+    display: flex;
+    list-style: none;
+    margin-right: 100px;        
+}
+
+.hdroite ul li{
+margin: 0px 60px;
+padding: 9px 0;
+
+}
+
+.hdroite ul li a{
+    text-decoration: none;
+    color: aliceblue;
+    font-size: 25px;
+    
+}
+
+.hdroite ul li a:hover{
+    text-decoration: underline;
+    transition:0.5s;
+    font-size: 30px;
+    color: black;
+}
