@@ -68,40 +68,59 @@ padding: 9px 0;
     text-align: center;
 }
 
-form{
-	/*max-width: 400px;*/
-	margin: auto;
-	padding: 10px;
-	border: 1px solid #ccc;
-	border-radius: 5px;
+/* Centrer le formulaire */
+form {
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
     width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-label{
-	font-weight: bold;
+/* Uniformiser la taille des champs */
+form input[type="number"],
+form input[type="text"],
+form input[type="text-area"]{
+    width: 80%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
 }
 
-input[type=text]{
-	width: 80%;
-	padding: 8px;
-	margin: 5px 0;
-	border: 1px solid #ccc;
-	border-radius: 3px;
+/* Boutons uniformes */
+form button {
+    width: 20%;
+    padding: 10px;
+    margin: 10px 5px;
+    font-size: 16px;
+    border-radius: 5px;
 }
 
-button{
-	background-color: #007BFF;
-	color: white;
-	padding: 10px 15px;
-	border: none;
-	border-radius: 3px;
-	cursor: pointer;
+/* Centrer les labels */
+form label {
+    width: 80%;
+    text-align: left;
+    margin-bottom: 5px;
+    font-weight: bold;
 }
 
-button:hover{
-	background-color: #0056b3;
+/* Afficher le champ catégorie correctement */
+#categorie {
+    display: none;
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
-#categorie{
-	display: none;
+.colonne{
+    display: flex;
+    justify-content: space-between;
+    margin: 0px 100px;
 }
