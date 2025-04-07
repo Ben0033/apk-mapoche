@@ -1,6 +1,6 @@
 body{
     font-family: Arial, Helvetica, sans-serif;
-    background-color: aqua;
+    background-color: rgb(27, 158, 228);
     padding: 0;
     margin: 0;
 }
@@ -9,7 +9,8 @@ header{
     display: flex;
     justify-content: space-between;
     height: 75px;
-    background-color: red;
+    background-color: rgb(10, 10, 90);
+    width: 100%;
 }
 
 .hgauche img{
@@ -32,7 +33,7 @@ padding: 9px 0;
 
 .hdroite ul li a{
     text-decoration: none;
-    color: aliceblue;
+    color: rgb(187, 187, 187);
     font-size: 25px;
     
 }
@@ -42,4 +43,65 @@ padding: 9px 0;
     transition:0.5s;
     font-size: 30px;
     color: black;
+}
+
+.footer{
+    background-color: rgb(10, 10, 90);
+    height: 65px;
+    width: 100%;
+    position: fixed;
+    text-align: center;
+    bottom: 0;
+    left: 0;
+    color: white;
+
+}
+
+.h1{
+    text-align: center;
+    font-size: 50px;
+    font-weight: bold;
+}
+
+.diva p{
+    font-size: 25px;
+    text-align: center;
+}
+
+form{
+	/*max-width: 400px;*/
+	margin: auto;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+    width: 50%;
+}
+
+label{
+	font-weight: bold;
+}
+
+input[type=text]{
+	width: 80%;
+	padding: 8px;
+	margin: 5px 0;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+}
+
+button{
+	background-color: #007BFF;
+	color: white;
+	padding: 10px 15px;
+	border: none;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+button:hover{
+	background-color: #0056b3;
+}
+
+#categorie{
+	display: none;
 }
