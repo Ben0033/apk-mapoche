@@ -45,17 +45,6 @@ padding: 9px 0;
     color: black;
 }
 
-.footer{
-    background-color: rgb(10, 10, 90);
-    height: 65px;
-    width: 100%;
-
-    text-align: center;
-    bottom: 0;
-    left: 0;
-    color: white;
-
-}
 
 .h1{
     text-align: center;
@@ -66,6 +55,10 @@ padding: 9px 0;
 .diva p{
     font-size: 25px;
     text-align: center;
+}
+section{
+    height: 100%;
+    margin-bottom: 100px;
 }
 
 /* Centrer le formulaire */
@@ -84,7 +77,9 @@ form {
 /* Uniformiser la taille des champs */
 form input[type="number"],
 form input[type="text"],
-form input[type="text-area"]{
+form input[type="text-area"],
+form input[type="email"],
+form input[type="password"]{
     width: 80%;
     padding: 10px;
     margin: 10px 0;
@@ -92,6 +87,7 @@ form input[type="text-area"]{
     border-radius: 5px;
     font-size: 16px;
 }
+
 
 /* Boutons uniformes */
 form button {
@@ -134,4 +130,23 @@ form label {
     display: flex;
     justify-content: space-between;
     margin: 0px 100px;
+}
+
+footer{
+    background-color: rgb(10, 10, 90);
+    height: 65px;
+    width: 100%;
+    position: fixed;
+    text-align: center;
+    bottom: 0;
+    color: white;
+}
+
+.connexion{
+    margin-top: 100px;
+}
+.mtpp{
+    display: flex;
+    justify-content: space-between;
+    width: 60%;
 }

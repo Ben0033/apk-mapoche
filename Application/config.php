@@ -1,6 +1,6 @@
 <?php
  $host ='localhost';
- $dbname = 'app_depense';
+ $dbname = 'apk-Mapoche';
  $username ='root';
  $password ='';
 
