@@ -15,7 +15,7 @@
    </table>
    <table>
       <tbody>
-         <?php foreach($): ?>
+         <?php //foreach(): ?>
             <tr>
                <td> <?=htmlspecialchars()?></td>
                <td> <?=htmlspecialchars()?></td>
@@ -25,12 +25,12 @@
                <td> <a href="" class="btn-danger">supprimer</a> </td>
                <td> <a href="" class="btn-info">modifier</a> </td>
             </tr>
-         <?php endforeach; ?>
+         <?php //endforeach; ?>
       </tbody>
    </table>
-   <?php else: ?>
+   <?php //else: ?>
       <p>Aucun un enregistrement</p>
-      <?php endif; ?>
+      <?php //endif; ?>
 <?php
    require_once 'footer.php'
    ?>
