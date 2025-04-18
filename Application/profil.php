@@ -6,6 +6,7 @@
    <div class="img_profil">
       <img src="images/pp.jpg" alt="image de profil">
       <h2><?=$nom ." ". $prnom ?></h2>
+      
       <a href="logout.php">Se deconnecter</a>
    </div>
    

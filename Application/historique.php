@@ -1,9 +1,10 @@
 <?php
    require_once 'header.php'
    ?>
-   <table>
+  
+   <table class="table">
       <legend>Historique de vos Dépense et Revenu</legend>
-      <thead>
+      <thead class="thead">
          <tr>
             <th>ordre</th>
             <th>Montant</th>
@@ -17,20 +18,20 @@
       <tbody>
          <?php //foreach(): ?>
             <tr>
-               <td> <?=htmlspecialchars()?></td>
-               <td> <?=htmlspecialchars()?></td>
-               <td> <?=htmlspecialchars()?></td>
-               <td> <?=htmlspecialchars()?></td>
-               <td> <?=htmlspecialchars()?></td>
+               <td> </td>
+               <td> </td>
+               <td></td>
+               <td> </td>
+               <td></td>
                <td> <a href="" class="btn-danger">supprimer</a> </td>
                <td> <a href="" class="btn-info">modifier</a> </td>
             </tr>
          <?php //endforeach; ?>
       </tbody>
-   </table>
+   </table> 
    <?php //else: ?>
       <p>Aucun un enregistrement</p>
       <?php //endif; ?>
 <?php
    require_once 'footer.php'
-   ?>
+ ?>
