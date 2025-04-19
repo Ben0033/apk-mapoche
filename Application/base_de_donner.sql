@@ -9,7 +9,7 @@ create table users (
     prenom_user varchar(50) not null,
     email_user varchar(50) not null,
     mot_de_passe_user varchar(50) not null,
-    photo_user binaire not null //au niveau de varchar vous aller mettre binaire dans le wampserver
+    photo_user BLOB not null -- Utiliser BLOB pour stocker des images
 );
  create table depense (
     id_depense int primary key autoincrement,

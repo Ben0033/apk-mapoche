@@ -208,3 +208,10 @@ table th{
         border-radius: 5px;
         background-color: #f9f9f9; /* Couleur de fond */
     }
+
+#message{
+    background-color: red;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
