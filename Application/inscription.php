@@ -1,7 +1,7 @@
 <?php
    require_once 'header.php'
    ?>
-     <form action="">
+     <form class="connexion" action="">
 
             <input type="text" placeholder="NOM" required="required">
             <input type="text" placeholder="PRENOM" required="required">
