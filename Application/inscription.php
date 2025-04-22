@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <input type="email" placeholder="Email" required="required" name="email_user">
     <input type="password" placeholder="Mots De Passe" required="required" name="mot_de_passe_user">
     <input type="password" placeholder="Confirmer le mot de passe" required="required" name="confirmer_mot_de_passe_user">
-    <input type="file" name="photo_user" required="required">
+    <input type="file" name="photo_user" required="required" >
 
     <?php if (!empty($message)): ?>
       <p id="message"><?=$message?></p>

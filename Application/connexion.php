@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = filter_var($_POST['email_user'], FILTER_SANITIZE_EMAIL);
     $password = $_POST['mot_de_passe_user'];
 
-    $stmt = $conn->prepare("SELECT id_user, email_user, mot_de_passe_user FROM users WHERE email_user = :mail");
+    $stmt = $conn->prepare("SELECT id_user, email_user, mot_de_passe_user , nom_user , prenom_user, photo_user FROM users WHERE email_user = :mail");
     $stmt->bindParam(':mail', $username);
     $stmt->execute();
 
@@ -16,7 +16,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($user && password_verify($password, $user['mot_de_passe_user'])) {
         // Set session variables
         $_SESSION['id_user'] = $user['id_user'];
-        $_SESSION['email_user'] = $user['email_user'];
+        $_SESSION['email_user'] = $user['email_user']; 
+        $_SESSION['nom_user'] = $user['nom_user'];
+        $_SESSION['prenom_user'] = $user['prenom_user'];
+        $_SESSION['photo_user'] = $user['photo_user'];
+    
+
 
         // Redirect to index.php
         header('Location: index.php');
@@ -37,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div>
             <input type="checkbox" name="remember_me"> Se souvenir de moi
         </div>
-        <a href="#">Mot de passe oublié</a>
+        <a href="reset_password.php">Mot de passe oublié</a>
     </div>
 
     <?php if (!empty($message)): ?>
