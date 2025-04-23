@@ -1,4 +1,5 @@
 <?php
+$title = "Inscription";
 require_once 'header.php';
 require 'config.php';
 

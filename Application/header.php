@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="css/style.css">
-    <title> Acceuil </title>
+    <title><?="MaPoche-".$title?></title>
 </head>
 <body>
     <header>

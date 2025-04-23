@@ -1,4 +1,5 @@
 <?php
+$title = "connexion";
 require_once 'header.php';
 session_start();
 require 'config.php';

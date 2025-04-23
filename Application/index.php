@@ -1,5 +1,6 @@
 
 <?php
+$title = "Accueil";
 require_once 'header.php';
 ?>
     <section>

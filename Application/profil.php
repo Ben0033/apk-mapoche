@@ -1,4 +1,5 @@
 <?php
+$title = "Profil";
 require_once 'header.php';
 session_start();
 

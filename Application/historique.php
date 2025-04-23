@@ -1,5 +1,7 @@
 <?php
-   require_once 'header.php'
+$title = "Historique";
+   require_once 'header.php';
+   
    ?>
   
    <table class="table">
