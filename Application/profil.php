@@ -11,7 +11,7 @@ if (!isset($_SESSION['id_user'])) {
 // Récupérez les informations de l'utilisateur depuis la session
 $nom = $_SESSION['nom_user'] ?? 'Nom';
 $prenom = $_SESSION['prenom_user'] ?? 'Prénom';
-$photo = $_SESSION['photo_user'] ?? 'default.jpg'; // Image par défaut si aucune photo n'est disponible
+$photo = $_SESSION['photo_user'] ?? 'default.png'; // Image par défaut si aucune photo n'est disponible
 ?>
 <div class="img_profil">
     <img src="uploads/<?= htmlspecialchars($photo, ENT_QUOTES, 'UTF-8') ?>" alt="image de profil">

@@ -11,6 +11,7 @@
             <th>Note</th>
             <th>Type</th>
             <th>Date</th>
+            <th>Actions</th>
          </tr>
       </thead>
    </table>

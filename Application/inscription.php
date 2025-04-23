@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prenom = htmlspecialchars($_POST['prenom_user']);
     $confirmer_mot_de_passe = $_POST['confirmer_mot_de_passe_user'];
 
-    // File upload handling
+    // Gestion de l'upload de fichier
     $photo = $_FILES['photo_user']['name'];
     $photo_tmp = $_FILES['photo_user']['tmp_name'];
     $photo_size = $_FILES['photo_user']['size'];
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message = "Erreur lors de l'upload de la photo";
     }
 
-    // Check if email already exists
+    // verifie le si l'email existe déjà
     $stmt = $conn->prepare("SELECT * FROM users WHERE email_user = :mail");
     $stmt->bindParam(':mail', $username);
     $stmt->execute();
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $password = password_hash($password, PASSWORD_BCRYPT);
 
-                // Insert user into database
+                // ajouter l'utilisateur à la base de données
                 $stmt = $conn->prepare("INSERT INTO users (email_user, mot_de_passe_user, nom_user, prenom_user, photo_user) VALUES (:mail, :pwd, :nom, :prenom, :photo)");
                 $stmt->bindParam(':mail', $username);
                 $stmt->bindParam(':pwd', $password);
@@ -58,6 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $prenom = '';
                         $confirmer_mot_de_passe = '';
                         $photo = '';
+                        header('Location: connexion.php');
+                        exit;
                 } else {
                     $message = "Inscription échouée";
                 }
