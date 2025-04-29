@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
 
 
-        // Redirect to index.php
+    //redirection  vers la page index
         header('Location: index.php');
         exit;
     } else {

@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
            
 
             
-            <!-- Input radio pour sélectionner dépense ou revenu -->
+            
             <div class="colone">
             <label>
                 <input type="radio" name="type" value="dépense" onclick="afficherCategorie()" required> Dépense
@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </label>
             <br><br>
         </div>
-            <!-- Champs texte -->
+           
             <!-- <label for="montant">Montant :</label> -->
             <input type="number" id="montant" name="montant" placeholder="Montant" style="display: none;"required>
             <br><br>
