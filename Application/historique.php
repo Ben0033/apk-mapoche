@@ -21,11 +21,11 @@ $title = "Historique";
       <tbody>
          <?php //foreach(): ?>
             <tr>
-               <td> </td>
-               <td> </td>
-               <td></td>
-               <td> </td>
-               <td></td>
+               <td>1</td>
+               <td>2500</td>
+               <td>hfdbdfffv</td>
+               <td>12200</td>
+               <td>ergggrr</td>
                <td> <a href="" class="btn-danger">supprimer</a> </td>
                <td> <a href="" class="btn-info">modifier</a> </td>
             </tr>

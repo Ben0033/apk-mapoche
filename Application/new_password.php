@@ -1,9 +1,18 @@
 <?php
+$title = "Réinitialiser le mot de passe";
+require_once 'header.php';
+session_start();
+// Vérifiez si l'utilisateur est déjà connecté
+if (isset($_SESSION['id_user'])) {
+    header('Location: index.php');
+    exit;
+}
+// Inclure le fichier de configuration pour la connexion à la base de données
 require 'config.php';
 
 $message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $token = filter_var($_POST['token'], FILTER_SANITIZE_STRING);
+    $token = htmlspecialchars($_POST['token'], ENT_QUOTES, 'UTF-8');
     $newPassword = $_POST['new_password'];
     $confirmPassword = $_POST['confirm_password'];
 

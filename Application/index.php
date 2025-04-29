@@ -2,6 +2,59 @@
 <?php
 $title = "Accueil";
 require_once 'header.php';
+
+require_once 'config.php'; 
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $type = $_POST['type'] ?? null;
+    $montant = $_POST['montant'] ?? null;
+    $description = $_POST['description'] ?? null;
+    $categorie = $_POST['categorie'] ?? null;
+    $id_user = $_SESSION['id_user'] ?? null; 
+    // Vérifier que les champs requis sont rempli
+    if (!$type || !$montant || !$description) {
+        echo "Tous les champs requis doivent être remplis.";
+        exit;
+    }
+
+    try {
+        // Préparer la requête en fonction du type (dépense ou revenu)
+        if ($type === 'dépense') {
+            if (!$categorie) {
+                echo "La catégorie est requise pour une dépense.";
+                exit;
+            }
+
+            $stmt = $conn->prepare("
+                INSERT INTO depense (id_user, id_cat, date_depense, montant_depense, description_depense)
+                VALUES (:id_user, :id_cat, NOW(), :montant, :description)
+            ");
+            $stmt->execute([
+                ':id_user' => $id_user,
+                ':id_cat' => $categorie, 
+                ':montant' => $montant,
+                ':description' => $description
+            ]);
+        } elseif ($type === 'revenu') {
+            $stmt = $conn->prepare("
+                INSERT INTO revenue (id_user, date_revenu, montant_revenu, description_revenu)
+                VALUES (:id_user, NOW(), :montant, :description)
+            ");
+            $stmt->execute([
+                ':id_user' => $id_user,
+                ':montant' => $montant,
+                ':description' => $description
+            ]);
+        } else {
+            echo "Type invalide.";
+            exit;
+        }
+
+        echo "Enregistrement réussi.";
+    } catch (PDOException $e) {
+        echo "Erreur : " . $e->getMessage();
+    }
+}
 ?>
     <section>
         <h1 class="h1">Bienvenue sur MaPoche</h1>
@@ -24,7 +77,7 @@ require_once 'header.php';
         </div>
             <!-- Champs texte -->
             <label for="montant">Montant :</label>
-            <input type="number" id="montant" name="montant" step="1000" required>
+            <input type="number" id="montant" name="montant" required>
             <br><br>
             
             <label for="description">Description :</label>

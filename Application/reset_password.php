@@ -1,4 +1,13 @@
 <?php
+$title = "Réinitialiser le mot de passe";
+require_once 'header.php';
+session_start();
+// Vérifiez si l'utilisateur est déjà connecté
+if (isset($_SESSION['id_user'])) {
+    header('Location: index.php');
+    exit;
+}
+// Inclure le fichier de configuration pour la connexion à la base de données
 require 'config.php';
 
 $message = '';
@@ -12,8 +21,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user) {
-        // Générer un jeton unique
-        $token = bin2hex(random_bytes(50));
+        try {
+            // Générer un jeton unique
+            $token = bin2hex(random_bytes(50));
+        } catch (Exception $e) {
+            $message = "Une erreur est survenue lors de la génération du jeton. Veuillez réessayer.";
+            exit;
+        }
         $stmt = $conn->prepare("UPDATE users SET reset_token = :token, reset_token_expiry = DATE_ADD(NOW(), INTERVAL 1 HOUR) WHERE email_user = :email");
         $stmt->bindParam(':token', $token);
         $stmt->bindParam(':email', $email);
