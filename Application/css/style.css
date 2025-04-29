@@ -74,7 +74,7 @@ form {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Uniformiser la taille des champs */
+
 form input[type="number"],
 form input[type="text"],
 form input[type="text-area"],
@@ -86,6 +86,11 @@ form input[type="password"]{
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
+}
+
+select{
+    width: 80;
+    padding: 10px;
 }
 
 
@@ -293,4 +298,25 @@ legend {
     color: white;
     padding: 10px;
     border-radius: 5px;
+}
+
+
+#formulaire select {
+    width: 80%; /* Définir une largeur uniforme */
+    padding: 10px; /* Ajouter un peu de padding pour un meilleur rendu */
+    margin-bottom: 10px; /* Espacement entre les champs */
+    font-size: 16px; /* Taille de police uniforme */
+    border: 1px solid #ccc; /* Bordure uniforme */
+    border-radius: 5px; /* Coins arrondis */
+    box-sizing: border-box; /* Inclure le padding dans la largeur totale */
+}
+
+#cat {
+    display: none; /* Masquer par défaut */
+    width: 80%; /* Assurez-vous que la largeur est identique */
+    padding: 10px; /* Ajouter du padding */
+    font-size: 16px; /* Taille de police uniforme */
+    border: 1px solid #ccc; /* Bordure uniforme */
+    border-radius: 5px; /* Coins arrondis */
+    box-sizing: border-box; /* Inclure le padding dans la largeur totale */
 }

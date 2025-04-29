@@ -2,59 +2,6 @@
 <?php
 $title = "Accueil";
 require_once 'header.php';
-
-require_once 'config.php'; 
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $type = $_POST['type'] ?? null;
-    $montant = $_POST['montant'] ?? null;
-    $description = $_POST['description'] ?? null;
-    $categorie = $_POST['categorie'] ?? null;
-    $id_user = $_SESSION['id_user'] ?? null; 
-    // Vérifier que les champs requis sont rempli
-    if (!$type || !$montant || !$description) {
-        echo "Tous les champs requis doivent être remplis.";
-        exit;
-    }
-
-    try {
-        // Préparer la requête en fonction du type (dépense ou revenu)
-        if ($type === 'dépense') {
-            if (!$categorie) {
-                echo "La catégorie est requise pour une dépense.";
-                exit;
-            }
-
-            $stmt = $conn->prepare("
-                INSERT INTO depense (id_user, id_cat, date_depense, montant_depense, description_depense)
-                VALUES (:id_user, :id_cat, NOW(), :montant, :description)
-            ");
-            $stmt->execute([
-                ':id_user' => $id_user,
-                ':id_cat' => $categorie, 
-                ':montant' => $montant,
-                ':description' => $description
-            ]);
-        } elseif ($type === 'revenu') {
-            $stmt = $conn->prepare("
-                INSERT INTO revenue (id_user, date_revenu, montant_revenu, description_revenu)
-                VALUES (:id_user, NOW(), :montant, :description)
-            ");
-            $stmt->execute([
-                ':id_user' => $id_user,
-                ':montant' => $montant,
-                ':description' => $description
-            ]);
-        } else {
-            echo "Type invalide.";
-            exit;
-        }
-
-        echo "Enregistrement réussi.";
-    } catch (PDOException $e) {
-        echo "Erreur : " . $e->getMessage();
-    }
-}
 ?>
     <section>
         <h1 class="h1">Bienvenue sur MaPoche</h1>
@@ -62,32 +9,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p> De nos jours il est essentiel de savoir gérer ses dépenses, c'est dans ce sens que MaPoche est là pour vous aider à suivre vos dépenses au fil du temps.</p>
             <p>MaPoche vous permet d'enregistrer vos dépenses et vos revenus, mais aussi d'en garder une historique </p>
         </div>
-        <form id="formulaire">
-            <h2>Gérer vos Dépenses et Revenus</h2>
+        <form id="formulaire" method="post" action="index.php" enctype="multipart/form-data">
+             <h2>Gérer vos Dépenses et Revenus</h2>
+            <h4>Ajouter une Dépense ou un Revenu</h4>
+           <marquee behavior="ttt" direction="left">
+            <p>Vous pouvez ajouter une dépense ou un revenu en remplissant le formulaire ci-dessous, mais Veuillez choisir s'il sagit d'une depense ou un revenue.</p>
+           </marquee> 
+           
+
             
-            <!-- Input radio pour sélectionner dépense ou revenu -->
+            
             <div class="colone">
             <label>
-                <input type="radio" name="type" value="dépense" onclick="afficherCategorie()"> Dépense
+                <input type="radio" name="type" value="dépense" onclick="afficherCategorie()" required> Dépense
             </label>
             <label>
-                <input type="radio" name="type" value="revenu" onclick="afficherCategorie()"> Revenu
+                <input type="radio" name="type" value="revenu" onclick="afficherCategorie()" required> Revenu
             </label>
             <br><br>
         </div>
             <!-- Champs texte -->
             <label for="montant">Montant :</label>
-            <input type="number" id="montant" name="montant" required>
+            <input type="number" id="montant" name="montant" step="1000" required>
             <br><br>
             
-            <label for="description">Description :</label>
-            <input type="text-area" id="description" name="description" required>
+            <!-- <label for="description">Description :</label> -->
+            <input type="text-area" id="description" name="description" placeholder="description" style="display: none;" required>
             <br><br>
             
             <!-- Champ catégorie masqué par défaut -->
            <!-- <label for="categorie">Catégorie :</label> -->
-            <input type="text" id="categorie" name="categorie" placeholder="categorie">
+            <!-- <input type="text" id="categorie" name="categorie" placeholder="categorie"> -->
+             <select name="categorie" id="cat" width="80%" style="display: none;">
+                <option value="transport">transport</option>
+                <option value="restoration">restoration</option>
+                <option value="Soins_Medicaux"> soins medicaux</option>
+                <option value="autre">autre</option>
+             </select>
             <br><br>
+            <?php if (!empty($message)): ?>
+        <p id="message"><?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8') ?></p>
+    <?php endif; ?>
             <div class="btn">
                 <button type="submit">Valider</button>
                 <button type="reset">supprimer</button>
@@ -96,16 +58,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
         <script>
             function afficherCategorie() {
-                // Vérifie le bouton radio sélectionné
-                const type = document.querySelector('input[name="type"]:checked').value;
-                const categorieInput = document.getElementById('categorie');
-                
-                if (type === 'dépense') {
-                    categorieInput.style.display = 'block'; // Affiche l'input catégorie
-                } else {
-                    categorieInput.style.display = 'none'; // Masque l'input catégorie
-                }
-            }
+    // Vérifie le bouton radio sélectionné
+    const type = document.querySelector('input[name="type"]:checked');
+    const categorieInput = document.getElementById('cat'); // Champ catégorie
+    const montantInput = document.getElementById('montant'); // Champ montant
+    const descriptionInput = document.getElementById('description'); // Champ description
+
+    if (!type) {
+        // Si aucun bouton radio n'est sélectionné, on masque tout
+        categorieInput.style.display = 'none';
+        montantInput.style.display = 'none';
+        descriptionInput.style.display = 'none';
+        return;
+    }
+
+    if (type.value === 'dépense') {
+        // Si le type est "dépense", on affiche tout
+        categorieInput.style.display = 'block';
+        montantInput.style.display = 'block';
+        descriptionInput.style.display = 'block';
+    } else if (type.value === 'revenu') {
+        // Si le type est "revenu", on masque le champ catégorie
+        categorieInput.style.display = 'none';
+        montantInput.style.display = 'block';
+        descriptionInput.style.display = 'block';
+    }
+    
+}
         </script>
     </section>
    <?php
