@@ -12,13 +12,29 @@ require_once 'header.php';
         <form id="formulaire" method="post" action="index.php" enctype="multipart/form-data">
              <h2>Gérer vos Dépenses et Revenus</h2>
             <h4>Ajouter une Dépense ou un Revenu</h4>
-           <marquee behavior="ttt" direction="left">
-            <p>Vous pouvez ajouter une dépense ou un revenu en remplissant le formulaire ci-dessous, mais Veuillez choisir s'il sagit d'une depense ou un revenue.</p>
-           </marquee> 
-           
-
-            
-            
+           <div class="scroll-text">
+            <p>Veillez cliquer sur le type d'enregistrement que vous désiriez effectuer.</p>
+           </div>
+           <!-- <style>
+               .scroll-text {
+                   overflow: hidden;
+                   white-space: nowrap;
+                   box-sizing: border-box;
+               }
+               .scroll-text p {
+                   display: inline-block;
+                   padding-left: 100%;
+                   animation: scroll-left 20s linear infinite;
+               }
+               @keyframes scroll-left {
+                   from {
+                       transform: translateX(100%);
+                   }
+                   to {
+                       transform: translateX(-100%);
+                   }
+               }
+           </style>  -->
             <div class="colone">
             <label>
                 <input type="radio" name="type" value="dépense" onclick="afficherCategorie()" required> Dépense
@@ -29,12 +45,12 @@ require_once 'header.php';
             <br><br>
         </div>
             <!-- Champs texte -->
-            <label for="montant">Montant :</label>
-            <input type="number" id="montant" name="montant" step="1000" required>
+            <!-- <label for="montant">Montant :</label> -->
+            <input type="number" id="montant" name="montant" placeholder="Montant" style="display: none;" required>
             <br><br>
             
             <!-- <label for="description">Description :</label> -->
-            <input type="text-area" id="description" name="description" placeholder="description" style="display: none;" required>
+            <input type="text-area" id="description" name="description" placeholder="Description" style="display: none;" required>
             <br><br>
             
             <!-- Champ catégorie masqué par défaut -->
@@ -48,11 +64,11 @@ require_once 'header.php';
              </select>
             <br><br>
             <?php if (!empty($message)): ?>
-        <p id="message"><?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8') ?></p>
-    <?php endif; ?>
+            <p id="message"><?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8') ?></p>
+            <?php endif; ?>
             <div class="btn">
                 <button type="submit">Valider</button>
-                <button type="reset">supprimer</button>
+                <button type="reset">Vider</button>
             </div>
         </form>
     
@@ -66,8 +82,9 @@ require_once 'header.php';
 
     if (!type) {
         // Si aucun bouton radio n'est sélectionné, on masque tout
-        categorieInput.style.display = 'none';
+        // contenue.style.display = "none";
         montantInput.style.display = 'none';
+        categorieInput.style.display = 'none';
         descriptionInput.style.display = 'none';
         return;
     }

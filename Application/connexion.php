@@ -1,7 +1,6 @@
 <?php
 $title = "connexion";
 require_once 'header.php';
-session_start();
 require 'config.php';
 
 $message = '';
@@ -22,8 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['prenom_user'] = $user['prenom_user'];
         $_SESSION['photo_user'] = $user['photo_user'];
     
-
-
         // Redirect to index.php
         header('Location: index.php');
         exit;
@@ -34,11 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <form class="connexion" action="" method="post">
     <h2>CONNEXION A VOTRE COMPTE</h2>
-
     <input type="email" name="email_user" placeholder="Email" required="required" value="<?= htmlspecialchars($_POST['email_user'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
-
     <input type="password" name="mot_de_passe_user" placeholder="Mot de passe" required="required">
-
+    
     <div class="mtpp">
         <div>
             <input type="checkbox" name="remember_me"> Se souvenir de moi

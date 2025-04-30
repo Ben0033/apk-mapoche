@@ -1,7 +1,6 @@
 <?php
 $title = "Réinitialiser le mot de passe";
 require_once 'header.php';
-session_start();
 // Vérifiez si l'utilisateur est déjà connecté
 if (isset($_SESSION['id_user'])) {
     header('Location: index.php');

@@ -1,7 +1,12 @@
 <?php
 $title = "Historique";
    require_once 'header.php';
-   
+// Vérifiez si l'utilisateur est connecté
+if (!isset($_SESSION['id_user'])) {
+      header('Location: connexion.php');
+      exit;
+}
+require 'config.php';
    ?>
   
    <table class="table">
@@ -33,7 +38,7 @@ $title = "Historique";
       </tbody>
    </table> 
    <?php //else: ?>
-      <p>Aucun un enregistrement</p>
+      <p style="text-align: center;">Aucun un enregistrement</p>
       <?php //endif; ?>
 <?php
    require_once 'footer.php'

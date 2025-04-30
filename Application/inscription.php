@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (in_array($photo_ext, $allowed_ext) && $photo_size <= 2000000 && $photo_error === 0) {
         move_uploaded_file($photo_tmp, $photo_destination);
     } else {
-        $message = "Erreur lors de l'upload de la photo";
+        $message = "Erreur lors du téléversement de la photo";
     }
 
     // verifie le si l'email existe déjà

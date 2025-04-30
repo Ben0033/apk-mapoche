@@ -1,3 +1,6 @@
+<?php 
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -15,7 +18,9 @@
                 <li> <a href="index.php"> Acceuil</a></li>
                 <li><a href="historique.php">Historique</a></li>
                 <li><a href="profil.php">Profil</a></li>
-                <li><a href="connexion.php">connexion</a></li>
+                <?php if (!isset($_SESSION['user'])): ?>
+                    <li><a href="connexion.php">connexion</a></li>
+                <?php endif; ?>
             </ul>
         </nav>
     </header>
