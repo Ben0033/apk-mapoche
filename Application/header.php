@@ -15,11 +15,13 @@ session_start();
         </div>
         <nav class="hdroite">
             <ul>
-                <li> <a href="index.php"> Acceuil</a></li>
-                <li><a href="historique.php">Historique</a></li>
-                <li><a href="profil.php">Profil</a></li>
+                
                 <?php if (!isset($_SESSION['user'])): ?>
                     <li><a href="connexion.php">connexion</a></li>
+                <?php else: ?>  
+                    <li> <a href="index.php"> Acceuil</a></li>
+                    <li><a href="historique.php">Historique</a></li>
+                    <li><a href="profil.php">Profil</a></li>
                 <?php endif; ?>
             </ul>
         </nav>
