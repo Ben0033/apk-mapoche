@@ -1,5 +1,6 @@
 <?php 
 session_start();
+$title = isset($title) ? $title : "Accueil"; 
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -15,14 +16,12 @@ session_start();
         </div>
         <nav class="hdroite">
             <ul>
-                
-                <?php if (!isset($_SESSION['user'])): ?>
-                    <li><a href="connexion.php">connexion</a></li>
-                <?php else: ?>  
-                    <li> <a href="index.php"> Acceuil</a></li>
-                    <li><a href="historique.php">Historique</a></li>
-                    <li><a href="profil.php">Profil</a></li>
-                <?php endif; ?>
+            <li><a href="index.php">Accueil</a></li>
+            <li><a href="historique.php">Historique</a></li>
+            <li><a href="profil.php">Profil</a></li>
+            <?php if (!isset($_SESSION['id_user'])): ?>
+                <li><a href="connexion.php">Connexion</a></li>
+            <?php endif; ?>
             </ul>
         </nav>
     </header>
