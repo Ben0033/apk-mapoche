@@ -45,6 +45,7 @@ require_once 'header.php';
             <br><br>
         </div>
             <!-- Champs texte -->
+            <!-- Champs texte -->
             <!-- <label for="montant">Montant :</label> -->
             <input type="number" id="montant" name="montant" placeholder="Montant" style="display: none;" required>
             <br><br>
