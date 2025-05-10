@@ -320,3 +320,21 @@ legend {
     border-radius: 5px; /* Coins arrondis */
     box-sizing: border-box; /* Inclure le padding dans la largeur totale */
 }
+
+.case1,.case2,.case4,.case5{
+    width: 165px;
+}
+ .case3{
+    min-width: 500px;
+    width: auto;
+ }
+
+ .case6{
+    width: 210px;
+    margin: 10px;
+}
+
+.case6 a{
+    margin-right: 10px;
+}
+

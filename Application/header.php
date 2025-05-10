@@ -1,6 +1,6 @@
 <?php 
 session_start();
-$title = isset($title) ? $title : "Accueil"; 
+$title = isset($title) ? $title : "MaPoche"; 
 ?>
 <!DOCTYPE html>
 <html lang="fr">

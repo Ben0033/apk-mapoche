@@ -1,6 +1,6 @@
 <?php
 $title = "Inscription";
-require_once 'header.php';
+// require_once 'header.php';
 require 'config.php';
 
 $message = '';
@@ -86,5 +86,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <p>Vous avez déjà un compte ? <a href="connexion.php">Se Connecter</a></p>
 </form>
 <?php
-require_once 'footer.php';
+// require_once 'footer.php';
 ?>
