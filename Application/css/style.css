@@ -39,10 +39,10 @@ padding: 9px 0;
 }
 
 .hdroite ul li a:hover{
-    text-decoration: underline;
+    background-color: #f1f1f1;
     transition:0.5s;
     font-size: 30px;
-    color: rgb(219, 214, 214);
+    color: rgb(18, 24, 59);
 }
 
 
@@ -338,3 +338,6 @@ legend {
     margin-right: 10px;
 }
 
+.renit{
+    margin-top: 15%;
+}

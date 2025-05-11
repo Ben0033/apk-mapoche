@@ -1,6 +1,6 @@
 <?php
 $title = "Réinitialiser le mot de passe";
-require_once 'header.php';
+require_once 'header_conn.php';
 // Vérifiez si l'utilisateur est déjà connecté
 if (isset($_SESSION['id_user'])) {
     header('Location: index.php');
@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-<form action="" method="post">
+<form action="" method="post" class="renit">
     <h2>Réinitialiser le mot de passe</h2>
     <input type="email" name="email_user" placeholder="Email" required="required">
     <button type="submit">Envoyer</button>

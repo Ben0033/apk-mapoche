@@ -15,26 +15,7 @@ require_once 'header.php';
            <div class="scroll-text">
             <p>Veillez cliquer sur le type d'enregistrement que vous désiriez effectuer.</p>
            </div>
-           <!-- <style>
-               .scroll-text {
-                   overflow: hidden;
-                   white-space: nowrap;
-                   box-sizing: border-box;
-               }
-               .scroll-text p {
-                   display: inline-block;
-                   padding-left: 100%;
-                   animation: scroll-left 20s linear infinite;
-               }
-               @keyframes scroll-left {
-                   from {
-                       transform: translateX(100%);
-                   }
-                   to {
-                       transform: translateX(-100%);
-                   }
-               }
-           </style>  -->
+           
             <div class="colone">
             <label>
                 <input type="radio" name="type" value="dépense" onclick="afficherCategorie()" required> Dépense
@@ -44,7 +25,6 @@ require_once 'header.php';
             </label>
             <br><br>
         </div>
-            <!-- Champs texte -->
             <!-- Champs texte -->
             <!-- <label for="montant">Montant :</label> -->
             <input type="number" id="montant" name="montant" placeholder="Montant" style="display: none;" required>

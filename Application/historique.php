@@ -9,47 +9,30 @@ if (!isset($_SESSION['id_user'])) {
 }
 
 require 'config.php';
-<<<<<<< HEAD
-   ?>
-  
-   <table class="table">
-      <legend>Historique de vos Dépense et Revenu</legend>
-      <thead class="thead">
-         <tr style="text-align: center;">
-            <th>ordre</th>
-            <th>Montant</th>
-            <th>Note</th>
-            <th>Type</th>
-            <th>Date</th>
-            <th>Actions</th>
-         </tr>
-      </thead>
-      <tbody>
-         <?php //foreach(): ?>
-            <tr >
-               <td class="case1">1</td>
-               <td class="case2">2500</td>
-               <td class="case3">hfdbdfffv</td>
-               <td class="case4">12200</td>
-               <td class="case5">ergggrr</td>
-               <td class="case6" id="actions"><a href="" class="btn-info">modifier</a> 
-               <a href="" class="btn-danger">supprimer</a></td>
-=======
 
-// Récupérer les données depuis la base de données
+// Récupérer les données depuis les tables revenue et depense
 $id_user = $_SESSION['id_user'];
-$query = $conn->prepare("SELECT * FROM historique WHERE id_user = :id_user ORDER BY date DESC");
+$query = $conn->prepare("
+    SELECT montant_revenu AS montant, description_revenu AS description, 'Revenu' AS type, date_revenu AS date, id_revenu AS id
+    FROM revenue
+    WHERE id_user = :id_user
+    UNION
+    SELECT montant_depense AS montant, description_depense AS description, 'Depense' AS type, date_depense AS date, id_depense AS id
+    FROM depense
+    WHERE id_user = :id_user
+    ORDER BY date DESC
+");
 $query->execute(['id_user' => $id_user]);
 $historique = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <table class="table">
-   <legend>Historique de vos Dépense et Revenu</legend>
+   <legend>Historique de vos Dépenses et Revenus</legend>
    <thead class="thead">
       <tr>
          <th>Ordre</th>
          <th>Montant</th>
-         <th>Note</th>
+         <th>Description</th>
          <th>Type</th>
          <th>Date</th>
          <th>Actions</th>
@@ -61,14 +44,13 @@ $historique = $query->fetchAll(PDO::FETCH_ASSOC);
             <tr>
                <td><?= $index + 1 ?></td>
                <td><?= htmlspecialchars($entry['montant']) ?></td>
-               <td><?= htmlspecialchars($entry['note']) ?></td>
+               <td><?= htmlspecialchars($entry['description']) ?></td>
                <td><?= htmlspecialchars($entry['type']) ?></td>
                <td><?= htmlspecialchars($entry['date']) ?></td>
                <td>
-                  <a href="supprimer.php?id=<?= $entry['id'] ?>" class="btn-danger">Supprimer</a>
-                  <a href="modifier.php?id=<?= $entry['id'] ?>" class="btn-info">Modifier</a>
+                  <a href="supprimer.php?id=<?= $entry['id'] ?>&type=<?= $entry['type'] ?>" class="btn-danger">Supprimer</a>
+                  <a href="modifier.php?id=<?= $entry['id'] ?>&type=<?= $entry['type'] ?>" class="btn-info">Modifier</a>
                </td>
->>>>>>> 04977b29710a5a672ecbd1a9c4c3792a06797107
             </tr>
          <?php endforeach; ?>
       <?php else: ?>
