@@ -1,5 +1,5 @@
-database apk_mapoche;
-
+create database apk_mapoche;
+use apk_mapoche;
 -- Table categorie
 create table categorie (
     id_cat int primary key auto_increment,
