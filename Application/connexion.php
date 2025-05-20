@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div>
             <input type="checkbox" name="remember_me"> Se souvenir de moi
         </div>
-        <a href="reset_password.php">Mot de passe oublié</a>
+        <a href="reset_password.php" style="text-decoration: none;">Mot de passe oublié</a>
     </div>
 
     <?php if (!empty($message)): ?>
