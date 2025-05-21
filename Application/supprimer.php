@@ -17,7 +17,7 @@ if ($id && $type) {
         if ($type === 'Revenu') {
             // Supprimer depuis la table revenue
             $stmt = $conn->prepare("DELETE FROM revenue WHERE id_revenu = :id AND id_user = :id_user");
-        } elseif ($type === 'Dépense') {
+        } elseif ($type === 'Depense') {
             // Supprimer depuis la table depense
             $stmt = $conn->prepare("DELETE FROM depense WHERE id_depense = :id AND id_user = :id_user");
         } else {

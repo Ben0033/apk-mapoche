@@ -27,6 +27,40 @@ try {
     $categories = [];
     $message = "Erreur lors de la récupération des catégories : " . $e->getMessage();
 }
+// enregistrement de la dépense ou du revenu
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if ($type === 'dépense') {
+        $sql = "INSERT INTO depense (montant_depense, description_depense, id_cat, id_user) VALUES (:montant, :description, :categorie, :id_user)";
+    } elseif ($type === 'revenu') {
+        $sql = "INSERT INTO revenue (montant_revenu, description_revenu, id_user) VALUES (:montant, :description, :id_user)";
+    } else {
+        $message = "Type d'enregistrement invalide.";
+    }
+    // Vérifiez si le montant est supérieur à 0
+    if ($montant <= 0) {
+        $message = "Le montant doit être supérieur à 0.";
+    }
+
+    if (isset($sql)) {
+        try {
+            $stmt = $conn->prepare($sql);
+            if ($type === 'dépense') {
+                $stmt->bindParam(':categorie', $categorie);
+            }
+            $stmt->bindParam(':montant', $montant);
+            $stmt->bindParam(':description', $description);
+            $stmt->bindParam(':id_user', $id_user);
+            if ($stmt->execute()) {
+                $message = "Enregistrement réussi.";
+            } else {
+                $message = "Erreur lors de l'enregistrement.";
+            }
+        } catch (PDOException $e) {
+            $message = "Erreur lors de l'enregistrement : " . $e->getMessage();
+        }
+    }
+}
+
 ?>
 <section>
     <h1 class="h1">Bienvenue sur MaPoche</h1>
