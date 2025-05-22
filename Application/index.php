@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php if (!empty($message)): ?>
             <p id="message"><?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8') ?></p>
         <?php endif; ?>
-
+        <div class="linkAjoutCat"><a id="linkAC" href="ajoutCat.php"style="text-decoration:none;">Ajouter une catégorie</a></div>
         <div class="btn">
             <button type="submit">Valider</button>
             <button class="reset" type="reset">Vider</button>

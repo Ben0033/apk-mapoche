@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 <form class="connexion" action="" method="post">
-    <h2>CONNEXION A VOTRE COMPTE</h2>
+    <h2>Ajouter une catégorie</h2>
     <input type="text" name="categorie" placeholder="Ajouter vos catégorie" required="required" value="<?= htmlspecialchars($_POST['categorie'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
     <?php if (!empty($message)): ?>
         <p id="message"><?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8') ?></p>

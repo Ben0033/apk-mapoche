@@ -331,24 +331,43 @@ legend {
 
 
 #formulaire select {
-    width: 80%; /* Définir une largeur uniforme */
-    padding: 10px; /* Ajouter un peu de padding pour un meilleur rendu */
-    margin-bottom: 10px; /* Espacement entre les champs */
-    font-size: 16px; /* Taille de police uniforme */
-    border: 1px solid #ccc; /* Bordure uniforme */
-    border-radius: 5px; /* Coins arrondis */
-    box-sizing: border-box; /* Inclure le padding dans la largeur totale */
+    width: 80%; 
+    padding: 10px; 
+    margin-bottom: 10px; 
+    font-size: 16px; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    box-sizing: border-box; 
+}
+
+#formulaire input[type="text"],
+#formulaire input[type="email"],
+#formulaire input[type="password"] {
+    width: 80%; 
+    padding: 10px; 
+    margin-bottom: 10px; 
+    font-size: 16px; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    box-sizing: border-box; 
+}
+#formulaire input[type="number"] {
+    width: 80%; 
+    padding: 10px; 
+    margin-bottom: 10px; 
+    font-size: 16px; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    box-sizing: border-box; 
 }
 
 #cat {
-    display: none; /* Masquer par défaut */
-    width: 80%; /* Assurez-vous que la largeur est identique */
-    padding: 10px; /* Ajouter du padding */
-    font-size: 16px; /* Taille de police uniforme */
-    border: 1px solid #ccc; /* Bordure uniforme */
-    border-radius: 5px; /* Coins arrondis */
-    box-sizing: border-box; /* Inclure le padding dans la largeur totale */
-}
+    display: none; 
+    width: 80%; 
+    font-size: 16px; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    box-sizing: border-box; 
 
 .case1,.case2,.case4,.case5{
     width: 165px;
@@ -369,4 +388,175 @@ legend {
 
 .renit{
     margin-top: 15%;
+}
+
+.renit a{
+    text-decoration: none;
+    color: rgb(10, 10, 90);
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid rgb(10, 10, 90);
+    border-radius: 5px;
+    transition: 0.4s;
+    background-color: rgb(10, 10, 90);
+    color: white;
+}
+.renit a:hover{
+    background-color: white;
+    color: rgb(10, 10, 90);
+    transition: 0.4s;
+    font-size: 17px;    
+    border: 1px solid rgb(10, 10, 90);
+    border-radius: 5px;
+    padding: 15px;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+@media (max-width: 1200px) {
+    .colonne {
+        margin: 0 20px;
+    }
+    .hdroite ul {
+        margin-right: 30px;
+    }
+}
+
+@media (max-width: 900px) {
+    header {
+        flex-direction: column;
+        height: auto;
+        align-items: flex-start;
+    }
+    .hdroite ul {
+        flex-direction: column;
+        margin-right: 0;
+        padding: 0;
+    }
+    .hdroite ul li {
+        margin: 10px 0;
+    }
+    .colonne {
+        flex-direction: column;
+        margin: 0 10px;
+    }
+    .case1, .case2, .case3, .case4, .case5, .case6 {
+        width: 100% !important;
+        min-width: unset !important;
+        margin: 5px 0;
+    }
+}
+
+@media (max-width: 700px) {
+    body {
+        font-size: 15px;
+    }
+    .entt h1, .img_profil h1 {
+        font-size: 22px;
+    }
+    .img_profil img {
+        width: 70px;
+        height: 70px;
+    }
+    #ajouterbtn {
+        margin-right: 10px;
+        width: 90%;
+        font-size: 16px;
+    }
+    form, #formulaire, #cat {
+        width: 95% !important;
+        min-width: unset;
+    }
+    .mtpp {
+        width: 95%;
+    }
+    table {
+        font-size: 14px;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+    }
+    thead, tbody, th, td, tr {
+        display: block;
+    }
+    thead {
+        display: none;
+    }
+    tbody tr {
+        margin-bottom: 15px;
+        border-bottom: 2px solid #eee;
+        background: #fff;
+    }
+    tbody td {
+        padding: 8px 5px;
+        border: none;
+        position: relative;
+    }
+    tbody td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        display: block;
+        margin-bottom: 3px;
+        color: #333;
+    }
+    .btn {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .btn-danger, .btn-info {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    footer {
+        font-size: 13px;
+        height: auto;
+        padding: 10px 0;
+        position: static;
+    }
+}
+
+@media (max-width: 500px) {
+    .img_profil img {
+        width: 50px;
+        height: 50px;
+    }
+    .img_profil h1, .entt h1 {
+        font-size: 16px;
+    }
+    .img_profil p {
+        font-size: 14px;
+    }
+    form label, form input, form select, form button {
+        font-size: 14px;
+    }
+}
+
+/* Pour rendre les boutons et champs plus accessibles sur mobile */
+form input, form select, form button {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+/* Pour les boutons d'action */
+.btn-danger, .btn-info {
+    width: 100%;
+    margin: 5px 0;
+}
+/* Pour les liens */
+.img_profil a {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+}
+/* Pour les messages d'erreur */
+#message {
+    font-size: 14px;
+    padding: 5px;
+    border-radius: 3px;
+}
 }

@@ -74,14 +74,13 @@ if ($id && $type) {
             <input type="text" name="description" id="description" value="<?= htmlspecialchars($entry['description']) ?>" required>
 
             <?php if ($type === 'Depense'): ?>
-                <label for="categorie">Catégorie:</label>
                 <select name="categorie" id="categorie" required>
                     <?php
                     // Récupérer les catégories depuis la base de données
                     $sql = "SELECT id_cat, nom_cat FROM categorie";
-                    $stmt = $conn->prepare($sql);
-                    $stmt->execute();
-                    $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    $stmtCat = $conn->prepare($sql);
+                    $stmtCat->execute();
+                    $categories = $stmtCat->fetchAll(PDO::FETCH_ASSOC);
                     foreach ($categories as $cat) {
                         $selected = (isset($entry['categorie']) && $cat['id_cat'] == $entry['categorie']) ? 'selected' : '';
                         echo "<option value=\"{$cat['id_cat']}\" $selected>{$cat['nom_cat']}</option>";

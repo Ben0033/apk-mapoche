@@ -45,18 +45,18 @@ $historique = $query->fetchAll(PDO::FETCH_ASSOC);
          <?php foreach ($historique as $index => $entry): ?>
             <tr>
                <td><?= $index + 1 ?></td>
-               <td><?= htmlspecialchars($entry['montant']) ?></td>
-               <td><?= htmlspecialchars($entry['description']) ?></td>
-               <td>
+               <td data-label="Montant"><?= htmlspecialchars($entry['montant']) ?></td>
+               <td data-label="Description"><?= htmlspecialchars($entry['description']) ?></td>
+               <td data-label="Catégorie">
                   <?php if ($entry['type'] === 'Depense'): ?>
                      <?= htmlspecialchars($entry['categorie']) ?>
                   <?php else: ?>
                      <span class="text-muted">N/A</span>
                   <?php endif; ?>
                </td>  
-               <td><?= htmlspecialchars($entry['type']) ?></td>
-               <td><?= htmlspecialchars($entry['date']) ?></td>
-               <td>
+               <td data-label="Type"><?= htmlspecialchars($entry['type']) ?></td>
+               <td data-label="Date"><?= htmlspecialchars($entry['date']) ?></td>
+               <td data-label="Actions">
                   <a href="supprimer.php?id=<?= $entry['id'] ?>&type=<?= $entry['type'] ?>" class="btn-danger">Supprimer</a>
                   <a href="modifier.php?id=<?= $entry['id'] ?>&type=<?= $entry['type'] ?>" class="btn-info">Modifier</a>
                </td>
@@ -64,8 +64,10 @@ $historique = $query->fetchAll(PDO::FETCH_ASSOC);
          <?php endforeach; ?>
       <?php else: ?>
          <tr>
-            <td colspan="6" style="text-align: center;">Aucun enregistrement trouvé</td>
-            <a id="ajouterbtn" href="index.php">Ajouter</a>
+            <td colspan="7" style="text-align: center;">
+               Aucun enregistrement trouvé
+               <a id="ajouterbtn" href="index.php">Ajouter</a>
+            </td>
          </tr>
       <?php endif; ?>
    </tbody>
