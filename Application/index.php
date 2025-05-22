@@ -30,9 +30,9 @@ try {
 // enregistrement de la dépense ou du revenu
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($type === 'dépense') {
-        $sql = "INSERT INTO depense (montant_depense, description_depense, id_cat, id_user) VALUES (:montant, :description, :categorie, :id_user)";
+        $sql = "INSERT INTO depense (montant_depense, date_depense,description_depense, id_cat, id_user) VALUES (:montant, now(),:description, :categorie, :id_user)";
     } elseif ($type === 'revenu') {
-        $sql = "INSERT INTO revenue (montant_revenu, description_revenu, id_user) VALUES (:montant, :description, :id_user)";
+        $sql = "INSERT INTO revenue (montant_revenu, date_revenu,description_revenu, id_user) VALUES (:montant, now(),:description, :id_user)";
     } else {
         $message = "Type d'enregistrement invalide.";
     }
@@ -112,11 +112,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div class="btn">
             <button type="submit">Valider</button>
-            <button type="reset">Vider</button>
+            <button class="reset" type="reset">Vider</button>
         </div>
     </form>
 
     <script>
+        // Ajouter l'écouteur d'événement une seule fois après le chargement du DOM
+        document.addEventListener('DOMContentLoaded', function() {
+            const resetButton = document.querySelector('.reset');
+            if (resetButton) {
+                resetButton.addEventListener('click', function() {
+                    document.getElementById('montant').style.display = 'none';
+                    document.getElementById('cat').style.display = 'none';
+                    document.getElementById('description').style.display = 'none';
+                });
+            }
+        });
+
         function afficherCategorie() {
             const type = document.querySelector('input[name="type"]:checked');
             const categorieInput = document.getElementById('cat');

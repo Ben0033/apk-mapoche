@@ -39,12 +39,36 @@ padding: 9px 0;
 }
 
 .hdroite ul li a:hover{
-    background-color: #f1f1f1;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 10px;
+    text-decoration: none;
     transition:0.5s;
     font-size: 30px;
     color: rgb(18, 24, 59);
 }
 
+.entt h1{
+    text-align: center;
+    font-size: 40px;
+    font-weight: bold;
+    color: rgb(255, 255, 255);
+}
+
+#ajouterbtn {
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: 100px;
+    margin-top: 10px;
+    background-color: rgb(10, 10, 90);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 20px;
+}
 
 .h1{
     text-align: center;

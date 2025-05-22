@@ -13,13 +13,14 @@ require 'config.php';
 // Récupérer les données depuis les tables revenue et depense
 $id_user = $_SESSION['id_user'];
 $query = $conn->prepare("
-    SELECT montant_revenu AS montant, description_revenu AS description, 'Revenu' AS type, date_revenu AS date, id_revenu AS id
+    SELECT montant_revenu AS montant, description_revenu AS description, NULL AS categorie, 'Revenu' AS type, date_revenu AS date, id_revenu AS id
     FROM revenue
     WHERE id_user = :id_user
     UNION
-    SELECT montant_depense AS montant, description_depense AS description, 'Depense' AS type, date_depense AS date, id_depense AS id
+    SELECT montant_depense AS montant, description_depense AS description, categorie.nom_cat AS categorie, 'Depense' AS type, date_depense AS date, id_depense AS id
     FROM depense
-    WHERE id_user = :id_user
+    INNER JOIN categorie ON categorie.id_cat = depense.id_cat
+    WHERE depense.id_user = :id_user
     ORDER BY date DESC
 ");
 $query->execute(['id_user' => $id_user]);
@@ -33,6 +34,7 @@ $historique = $query->fetchAll(PDO::FETCH_ASSOC);
          <th>Ordre</th>
          <th>Montant</th>
          <th>Description</th>
+         <th>Catégorie</th>
          <th>Type</th>
          <th>Date</th>
          <th>Actions</th>
@@ -45,6 +47,13 @@ $historique = $query->fetchAll(PDO::FETCH_ASSOC);
                <td><?= $index + 1 ?></td>
                <td><?= htmlspecialchars($entry['montant']) ?></td>
                <td><?= htmlspecialchars($entry['description']) ?></td>
+               <td>
+                  <?php if ($entry['type'] === 'Depense'): ?>
+                     <?= htmlspecialchars($entry['categorie']) ?>
+                  <?php else: ?>
+                     <span class="text-muted">N/A</span>
+                  <?php endif; ?>
+               </td>  
                <td><?= htmlspecialchars($entry['type']) ?></td>
                <td><?= htmlspecialchars($entry['date']) ?></td>
                <td>
@@ -56,6 +65,7 @@ $historique = $query->fetchAll(PDO::FETCH_ASSOC);
       <?php else: ?>
          <tr>
             <td colspan="6" style="text-align: center;">Aucun enregistrement trouvé</td>
+            <a id="ajouterbtn" href="index.php">Ajouter</a>
          </tr>
       <?php endif; ?>
    </tbody>
