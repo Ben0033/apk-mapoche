@@ -109,7 +109,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php if (!empty($message)): ?>
             <p id="message"><?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8') ?></p>
         <?php endif; ?>
-        <div class="linkAjoutCat"><a id="linkAC" href="ajoutCat.php"style="text-decoration:none;">Ajouter une catégorie</a></div>
+        <div class="linkAjoutCat" id="ajout">
+            <a id="linkAC" href="ajoutCat.php"style="text-decoration:none;">Ajouter une catégorie</a>
+        </div>
         <div class="btn">
             <button type="submit">Valider</button>
             <button class="reset" type="reset">Vider</button>
@@ -134,11 +136,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const categorieInput = document.getElementById('cat');
             const montantInput = document.getElementById('montant');
             const descriptionInput = document.getElementById('description');
+            const ajoutInput = document.getElementById('ajout');
 
             if (!type) {
                 montantInput.style.display = 'none';
                 categorieInput.style.display = 'none';
                 descriptionInput.style.display = 'none';
+                ajoutInput.style.display = 'none';
                 return;
             }
 
@@ -146,10 +150,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 categorieInput.style.display = 'block';
                 montantInput.style.display = 'block';
                 descriptionInput.style.display = 'block';
+                ajoutInput.style.display = 'block';
             } else if (type.value === 'revenu') {
                 categorieInput.style.display = 'none';
                 montantInput.style.display = 'block';
                 descriptionInput.style.display = 'block';
+                ajoutInput.style.display = 'none';
             }
         }
     </script>

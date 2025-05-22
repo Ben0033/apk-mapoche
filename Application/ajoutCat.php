@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <button type="submit">Ajouter</button>
 
-    <p><a href="index.php">Faire enregistrement</a></p>
+    <p><a href="index.php">Faire un enregistrement</a></p>
 </form>
 <?php
  require_once 'footer_conn.php'
