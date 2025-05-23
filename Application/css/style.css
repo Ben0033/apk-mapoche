@@ -143,6 +143,10 @@ form button:hover{
     display: flex;
     justify-content: space-around;
 }
+
+.btns{
+    width: 20%;
+}
 /* Centrer les labels */
 form label {
     width: 80%;
@@ -418,7 +422,22 @@ legend {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+.pro{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    margin: 0px 100px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    width: 100%;
+    height: auto;
+}
 
+.pros{
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+}
 @media (max-width: 1200px) {
     .colonne {
         margin: 0 20px;
