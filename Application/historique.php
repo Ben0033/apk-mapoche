@@ -24,53 +24,159 @@ try {
    $historique = [];
    error_log("Error fetching history: " . $e->getMessage());
 }
-?>
 
-<table class="table">
-   <legend>Historique de vos Dépenses et Revenus</legend>
-   <thead class="thead">
-      <tr>
-         <th>Ordre</th>
-         <th>Montant</th>
-         <th>Description</th>
-         <th>Catégorie</th>
-         <th>Type</th>
-         <th>Date</th>
-         <th>Actions</th>
-      </tr>
-   </thead>
-   <tbody>
-      <?php if (!empty($historique)): ?>
-         <?php foreach ($historique as $index => $entry): ?>
-            <tr>
-               <td><?= $index + 1 ?></td>
-               <td data-label="Montant"><?= htmlspecialchars($entry['montant']) ?></td>
-               <td data-label="Description"><?= htmlspecialchars($entry['description']) ?></td>
-               <td data-label="Catégorie">
-                  <?php if ($entry['type'] === 'Depense'): ?>
-                     <?= htmlspecialchars($entry['categorie']) ?>
-                  <?php else: ?>
-                     <span class="text-muted">N/A</span>
-                  <?php endif; ?>
-               </td>
-               <td data-label="Type"><?= htmlspecialchars($entry['type']) ?></td>
-               <td data-label="Date"><?= htmlspecialchars($entry['date']) ?></td>
-               <td data-label="Actions">
-                  <a href="supprimer.php?id=<?= $entry['id'] ?>&type=<?= $entry['type'] ?>" class="btn-danger">Supprimer</a>
-                  <a href="modifier.php?id=<?= $entry['id'] ?>&type=<?= $entry['type'] ?>" class="btn-info">Modifier</a>
-               </td>
-            </tr>
-         <?php endforeach; ?>
-      <?php else: ?>
-         <tr>
-            <td colspan="7" style="text-align: center;">
-               Aucun enregistrement trouvé
-               <a id="ajouterbtn" href="index.php">Ajouter</a>
-            </td>
-         </tr>
-      <?php endif; ?>
-   </tbody>
-</table>
+// Afficher les messages de session
+$success_message = $_SESSION['success_message'] ?? '';
+$error_message = $_SESSION['error_message'] ?? '';
+unset($_SESSION['success_message'], $_SESSION['error_message']);
+?>
+<div class="mobile-container">
+    <!-- Overlay for sidebar -->
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    
+    <!-- Header Mobile -->
+    <header class="mobile-header">
+        <div class="header-top">
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
+            <h1 class="app-title">MaPoche</h1>
+            <div class="user-avatar">
+                <img src="<?= getProfilePhotoPath(Auth::user()['photo_user'] ?? '') ?>" alt="Avatar">
+            </div>
+        </div>
+        <div class="welcome-section">
+            <h2>Historique</h2>
+            <p class="balance-info">
+                <span class="balance-label">Vos transactions</span>
+            </p>
+        </div>
+    </header>
+
+    <!-- Navigation Sidebar -->
+    <nav class="side-nav" id="sideNav">
+        <div class="nav-header">
+            <button class="close-nav" onclick="toggleMenu()">×</button>
+            <div class="nav-user">
+                <img src="<?= getProfilePhotoPath(Auth::user()['photo_user'] ?? '') ?>" alt="Avatar">
+                <span><?= htmlspecialchars(Auth::user()['prenom_user'] . ' ' . Auth::user()['nom_user']) ?></span>
+            </div>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="index.php" class="nav-link">🏠 Accueil</a></li>
+            <li><a href="historique.php" class="nav-link active">📊 Historique</a></li>
+            <li><a href="profil.php" class="nav-link">👤 Profil</a></li>
+            <li><a href="changer_mdp.php" class="nav-link">🔐 Mot de passe</a></li>
+            <li><a href="logout.php" class="nav-link">🚪 Déconnexion</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Stats Summary -->
+        <section class="stats-cards">
+            <div class="stat-card income">
+                <div class="stat-icon">💰</div>
+                <div class="stat-info">
+                    <span class="stat-label">Total Revenus</span>
+                    <span class="stat-value"><?= formatAmount(array_sum(array_column(array_filter($historique, fn($item) => $item['type'] === 'Revenu'), 'montant'))) ?></span>
+                </div>
+            </div>
+            <div class="stat-card expense">
+                <div class="stat-icon">💸</div>
+                <div class="stat-info">
+                    <span class="stat-label">Total Dépenses</span>
+                    <span class="stat-value"><?= formatAmount(array_sum(array_column(array_filter($historique, fn($item) => $item['type'] === 'Depense'), 'montant'))) ?></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Messages -->
+        <?php if (!empty($success_message)): ?>
+            <div class="message-container">
+                <?= displaySuccess($success_message) ?>
+            </div>
+        <?php endif; ?>
+        
+        <?php if (!empty($error_message)): ?>
+            <div class="message-container">
+                <?= displayError($error_message) ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- History List -->
+        <section class="history-section">
+            <h3>Historique des Transactions</h3>
+            
+            <?php if (!empty($historique)): ?>
+                <div class="transaction-list">
+                    <?php foreach ($historique as $entry): ?>
+                        <div class="transaction-item <?= strtolower($entry['type']) ?>">
+                            <div class="transaction-icon">
+                                <?= $entry['type'] === 'Revenu' ? '💰' : '💸' ?>
+                            </div>
+                            <div class="transaction-details">
+                                <div class="transaction-amount <?= $entry['type'] === 'Revenu' ? 'income' : 'expense' ?>">
+                                    <?= $entry['type'] === 'Revenu' ? '+' : '-' ?><?= formatAmount($entry['montant']) ?>
+                                </div>
+                                <div class="transaction-description">
+                                    <?= htmlspecialchars($entry['description']) ?>
+                                </div>
+                                <?php if ($entry['type'] === 'Depense' && $entry['categorie']): ?>
+                                    <div class="transaction-category">
+                                        🏷️ <?= htmlspecialchars($entry['categorie']) ?>
+                                    </div>
+                                <?php endif; ?>
+                                <div class="transaction-date">
+                                    📅 <?= date('d/m/Y', strtotime($entry['date'])) ?>
+                                </div>
+                            </div>
+                            <div class="transaction-actions">
+                                <a href="modifier.php?id=<?= $entry['id'] ?>&type=<?= $entry['type'] ?>" class="action-btn edit">✏️</a>
+                                <a href="supprimer.php?id=<?= $entry['id'] ?>&type=<?= $entry['type'] ?>" class="action-btn delete" onclick="return confirm('Supprimer cette transaction ?')">🗑️</a>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <div class="empty-state">
+                    <div class="empty-icon">📋</div>
+                    <h3>Aucune transaction</h3>
+                    <p>Commencez par ajouter votre première transaction</p>
+                    <a href="index.php" class="btn-primary">Ajouter une transaction</a>
+                </div>
+            <?php endif; ?>
+        </section>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="index.php" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Accueil</span>
+            </a>
+            <a href="historique.php" class="nav-item active">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Historique</span>
+            </a>
+            <a href="profil.php" class="nav-item">
+                <span class="nav-icon">👤</span>
+                <span class="nav-label">Profil</span>
+            </a>
+            <a href="logout.php" class="nav-item">
+                <span class="nav-icon">🚪</span>
+                <span class="nav-label">Déconnexion</span>
+            </a>
+        </nav>
+    </main>
+</div>
+
+<script>
+// Fonction pour basculer le menu
+function toggleMenu() {
+    const sideNav = document.getElementById('sideNav');
+    const overlay = document.getElementById('overlay');
+    sideNav.classList.toggle('active');
+    overlay.classList.toggle('active');
+}
+</script>
 
 <?php
 require_once 'footer.php';

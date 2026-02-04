@@ -1,61 +1,137 @@
 <?php
-$title = "Réinitialiser le mot de passe";
-require_once 'header_conn.php';
-// Vérifiez si l'utilisateur est déjà connecté
-if (isset($_SESSION['id_user'])) {
-    header('Location: index.php');
-    exit;
-}
-// Inclure le fichier de configuration pour la connexion à la base de données
-require 'config.php';
+require_once 'includes/bootstrap.php';
+
+$title = "Mot de passe oublié";
+Auth::requireLogout(); // Rediriger si déjà connecté
 
 $message = '';
+$message_type = '';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = filter_var($_POST['email_user'], FILTER_SANITIZE_EMAIL);
+    checkCSRF();
+    
+    try {
+        $email = sanitizeEmail($_POST['email_user'] ?? '');
 
-    // Vérifiez si l'email existe dans la base de données
-    $stmt = $conn->prepare("SELECT id_user FROM users WHERE email_user = :email");
-    $stmt->bindParam(':email', $email);
-    $stmt->execute();
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($user) {
-        try {
-            // Générer un jeton unique
-            $token = bin2hex(random_bytes(50));
-        } catch (Exception $e) {
-            $message = "Une erreur est survenue lors de la génération du jeton. Veuillez réessayer.";
-            exit;
+        if (empty($email)) {
+            throw new Exception('Email requis');
         }
-        $stmt = $conn->prepare("UPDATE users SET reset_token = :token, reset_token_expiry = DATE_ADD(NOW(), INTERVAL 1 HOUR) WHERE email_user = :email");
-        $stmt->bindParam(':token', $token);
-        $stmt->bindParam(':email', $email);
-        $stmt->execute();
 
-        // Construire dynamiquement le lien de réinitialisation
-        $resetLink = "http://" . $_SERVER['HTTP_HOST'] . "/new_password.php?token=" . urlencode($token);
-
-        // Envoyer un email avec le lien de réinitialisation
-        $subject = "Réinitialisation de votre mot de passe";
-        $messageBody = "Bonjour,\n\nCliquez sur ce lien pour réinitialiser votre mot de passe : $resetLink\n\nCe lien expirera dans 1 heure.";
-        $headers = "From: no-reply@yourwebsite.com\r\n";
-        $headers .= "Content-Type: text/plain; charset=UTF-8";
-
-        if (mail($email, $subject, $messageBody, $headers)) {
-            $message = "Un email de réinitialisation a été envoyé à votre adresse.";
-        } else {
-            $message = "Une erreur est survenue lors de l'envoi de l'email. Veuillez réessayer.";
+        if (!validateEmail($email)) {
+            throw new Exception('Email invalide');
         }
-    } else {
-        $message = "Aucun compte trouvé avec cet email.";
+
+        // Utiliser la méthode Auth pour demander la réinitialisation
+        Auth::requestPasswordReset($email);
+        
+        $message = 'Un email de réinitialisation a été envoyé à votre adresse email.';
+        $message_type = 'success';
+        
+        logAction('PASSWORD_RESET_REQUESTED', ['email' => $email]);
+    } catch (Exception $e) {
+        $message = $e->getMessage();
+        $message_type = 'error';
+        logAction('PASSWORD_RESET_FAILED', ['email' => $email, 'error' => $e->getMessage()]);
     }
 }
+
+require_once 'header_conn.php';
 ?>
-<form action="" method="post" class="renit">
-    <h2>Réinitialiser le mot de passe</h2>
-    <input type="email" name="email_user" placeholder="Email" required="required">
-    <button type="submit">Envoyer</button>
-    <?php if (!empty($message)): ?>
-        <p><?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8') ?></p>
-    <?php endif; ?>
-</form>
+<div class="auth-container">
+    <div class="auth-card">
+        <!-- Logo et Titre -->
+        <div class="auth-header">
+            <div class="auth-logo">
+                <img src="images/wallet.jpg" alt="MaPoche Logo">
+            </div>
+            <h1 class="auth-title">Mot de passe oublié</h1>
+            <p class="auth-subtitle">Récupérez l'accès à votre compte</p>
+        </div>
+
+        <!-- Formulaire de réinitialisation -->
+        <form class="auth-form" action="" method="post">
+            <input type="hidden" name="csrf_token" value="<?= getCSRFToken() ?>">
+            
+            <div class="form-group">
+                <label for="email_user" class="form-label">📧 Email</label>
+                <input type="email" id="email_user" name="email_user" class="form-input" 
+                       placeholder="votre@email.com" required value="<?= sanitize($_POST['email_user'] ?? '') ?>">
+            </div>
+
+            <?php if (!empty($message)): ?>
+                <div class="message-container">
+                    <?= $message_type === 'success' ? displaySuccess($message) : displayError($message) ?>
+                </div>
+            <?php endif; ?>
+
+            <button type="submit" class="btn-primary btn-full">📧 Envoyer l'email</button>
+        </form>
+
+        <!-- Instructions -->
+        <div class="auth-instructions">
+            <h4>📋 Instructions</h4>
+            <ul>
+                <li>Entrez votre adresse email</li>
+                <li>Vous recevrez un lien de réinitialisation</li>
+                <li>Le lien expire après 1 heure</li>
+                <li>Vérifiez vos spams si nécessaire</li>
+            </ul>
+        </div>
+
+        <!-- Lien vers connexion -->
+        <div class="auth-footer">
+            <p class="auth-switch">
+                Vous vous souvenez de votre mot de passe ? 
+                <a href="connexion.php" class="auth-link">Se Connecter</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <div class="auth-features">
+        <div class="feature-item">
+            <div class="feature-icon">🔐</div>
+            <h3>Sécurisé</h3>
+            <p>Réinitialisation sécurisée avec token temporaire</p>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">⚡</div>
+            <h3>Rapide</h3>
+            <p>Recevez votre lien en quelques secondes</p>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">📱</div>
+            <h3>Mobile</h3>
+            <p>Interface adaptée pour tous vos appareils</p>
+        </div>
+    </div>
+</div>
+
+<script>
+// Animation du formulaire
+document.addEventListener('DOMContentLoaded', function() {
+    const authCard = document.querySelector('.auth-card');
+    const authFeatures = document.querySelectorAll('.feature-item');
+    
+    // Animation d'entrée
+    setTimeout(() => {
+        authCard.style.opacity = '1';
+        authCard.style.transform = 'translateY(0)';
+    }, 100);
+    
+    // Animation des features
+    authFeatures.forEach((feature, index) => {
+        setTimeout(() => {
+            feature.style.opacity = '1';
+            feature.style.transform = 'translateY(0)';
+        }, 200 + (index * 100));
+    });
+});
+
+// Focus sur le champ email
+document.getElementById('email_user')?.focus();
+</script>
+
+<?php
+require_once 'footer_conn.php';
+?>

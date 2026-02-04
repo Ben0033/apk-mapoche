@@ -1,68 +1,180 @@
 <?php
-$title = "Réinitialiser le mot de passe";
-require_once 'header.php';
-// Vérifiez si l'utilisateur est déjà connecté
-if (isset($_SESSION['id_user'])) {
-    header('Location: index.php');
-    exit;
-}
-// Inclure le fichier de configuration pour la connexion à la base de données
-require 'config.php';
+require_once 'includes/bootstrap.php';
+
+$title = "Nouveau mot de passe";
+Auth::requireLogout(); // Rediriger si déjà connecté
 
 $message = '';
+$message_type = '';
+$token = '';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $token = htmlspecialchars($_POST['token'], ENT_QUOTES, 'UTF-8');
-    $newPassword = $_POST['new_password'];
-    $confirmPassword = $_POST['confirm_password'];
+    checkCSRF();
+    
+    try {
+        $token = sanitize($_POST['token'] ?? '');
+        $newPassword = $_POST['new_password'] ?? '';
+        $confirmPassword = $_POST['confirm_password'] ?? '';
 
-    // Vérifiez si les mots de passe correspondent
-    if ($newPassword === $confirmPassword) {
-        // Vérifiez si le mot de passe respecte les critères de sécurité
-        if (strlen($newPassword) < 8) {
-            $message = "Le mot de passe doit contenir au moins 8 caractères.";
-        } elseif (!preg_match('/[A-Z]/', $newPassword) || !preg_match('/[0-9]/', $newPassword)) {
-            $message = "Le mot de passe doit contenir au moins une lettre majuscule et un chiffre.";
-        } else {
-            // Vérifiez si le jeton est valide
-            $stmt = $conn->prepare("SELECT id_user FROM users WHERE reset_token = :token AND reset_token_expiry > NOW()");
-            $stmt->bindParam(':token', $token);
-            $stmt->execute();
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($user) {
-                // Mettre à jour le mot de passe
-                $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
-                $stmt = $conn->prepare("UPDATE users SET mot_de_passe_user = :password, reset_token = NULL, reset_token_expiry = NULL WHERE id_user = :id");
-                $stmt->bindParam(':password', $hashedPassword);
-                $stmt->bindParam(':id', $user['id_user']);
-                $stmt->execute();
-
-                $message = "Votre mot de passe a été réinitialisé avec succès. Vous serez redirigé vers la page de connexion.";
-                // Redirigez l'utilisateur vers la page de connexion après 3 secondes
-                header("refresh:3;url=connexion.php");
-                exit;
-            } else {
-                $message = "Le lien de réinitialisation est invalide ou a expiré.";
-            }
+        if (empty($token) || empty($newPassword) || empty($confirmPassword)) {
+            throw new Exception('Tous les champs sont obligatoires');
         }
-    } else {
-        $message = "Les mots de passe ne correspondent pas.";
+
+        // Utiliser la méthode Auth pour réinitialiser le mot de passe
+        Auth::resetPassword($token, $newPassword, $confirmPassword);
+        
+        $message = 'Votre mot de passe a été réinitialisé avec succès! Redirection vers la connexion...';
+        $message_type = 'success';
+        
+        logAction('PASSWORD_RESET_SUCCESS', ['token' => substr($token, 0, 10) . '...']);
+        
+        // Rediriger vers la connexion après 3 secondes
+        header('Refresh: 3; URL=connexion.php');
+    } catch (Exception $e) {
+        $message = $e->getMessage();
+        $message_type = 'error';
+        logAction('PASSWORD_RESET_FAILED', ['error' => $e->getMessage()]);
     }
 } elseif (isset($_GET['token'])) {
-    // Validez le jeton reçu via GET
-    $token = filter_var($_GET['token'], FILTER_SANITIZE_STRING);
+    $token = sanitize($_GET['token']);
 } else {
-    header('Location: connexion.php');
+    // Rediriger vers la page de demande de réinitialisation si pas de token
+    header('Location: reset_password.php');
     exit;
 }
+
+require_once 'header_conn.php';
 ?>
-<form action="" method="post">
-    <h2>Définir un nouveau mot de passe</h2>
-    <input type="hidden" name="token" value="<?= htmlspecialchars($token, ENT_QUOTES, 'UTF-8') ?>">
-    <input type="password" name="new_password" placeholder="Nouveau mot de passe" required="required">
-    <input type="password" name="confirm_password" placeholder="Confirmer le mot de passe" required="required">
-    <button type="submit">Réinitialiser</button>
-    <?php if (!empty($message)): ?>
-        <p><?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8') ?></p>
-    <?php endif; ?>
-</form>
+<div class="auth-container">
+    <div class="auth-card">
+        <!-- Logo et Titre -->
+        <div class="auth-header">
+            <div class="auth-logo">
+                <img src="images/wallet.jpg" alt="MaPoche Logo">
+            </div>
+            <h1 class="auth-title">Nouveau mot de passe</h1>
+            <p class="auth-subtitle">Définissez votre nouveau mot de passe</p>
+        </div>
+
+        <!-- Formulaire de nouveau mot de passe -->
+        <form class="auth-form" action="" method="post">
+            <input type="hidden" name="csrf_token" value="<?= getCSRFToken() ?>">
+            <input type="hidden" name="token" value="<?= htmlspecialchars($token, ENT_QUOTES, 'UTF-8') ?>">
+            
+            <div class="form-group">
+                <label for="new_password" class="form-label">🔑 Nouveau mot de passe</label>
+                <input type="password" id="new_password" name="new_password" class="form-input" 
+                       placeholder="Entrez votre nouveau mot de passe" required>
+                <small class="form-hint">8+ caractères, 1 majuscule, 1 chiffre</small>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password" class="form-label">🔑 Confirmer le mot de passe</label>
+                <input type="password" id="confirm_password" name="confirm_password" class="form-input" 
+                       placeholder="Confirmez votre nouveau mot de passe" required>
+            </div>
+
+            <?php if (!empty($message)): ?>
+                <div class="message-container">
+                    <?= $message_type === 'success' ? displaySuccess($message) : displayError($message) ?>
+                </div>
+            <?php endif; ?>
+
+            <button type="submit" class="btn-primary btn-full">🔐 Réinitialiser le mot de passe</button>
+        </form>
+
+        <!-- Instructions -->
+        <div class="auth-instructions">
+            <h4>📋 Exigences de sécurité</h4>
+            <ul>
+                <li>Minimum 8 caractères</li>
+                <li>Au moins une lettre majuscule</li>
+                <li>Au moins un chiffre</li>
+                <li>Évitez les mots de passe courants</li>
+            </ul>
+        </div>
+
+        <!-- Lien vers connexion -->
+        <div class="auth-footer">
+            <p class="auth-switch">
+                Vous vous souvenez de votre mot de passe ? 
+                <a href="connexion.php" class="auth-link">Se Connecter</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <div class="auth-features">
+        <div class="feature-item">
+            <div class="feature-icon">🛡️</div>
+            <h3>Sécurisé</h3>
+            <p>Mot de passe hashé avec bcrypt</p>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">⏰</div>
+            <h3>Temporaire</h3>
+            <p>Le lien expire après 1 heure</p>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">📱</div>
+            <h3>Mobile</h3>
+            <p>Interface adaptée pour tous vos appareils</p>
+        </div>
+    </div>
+</div>
+
+<script>
+// Animation du formulaire
+document.addEventListener('DOMContentLoaded', function() {
+    const authCard = document.querySelector('.auth-card');
+    const authFeatures = document.querySelectorAll('.feature-item');
+    
+    // Animation d'entrée
+    setTimeout(() => {
+        authCard.style.opacity = '1';
+        authCard.style.transform = 'translateY(0)';
+    }, 100);
+    
+    // Animation des features
+    authFeatures.forEach((feature, index) => {
+        setTimeout(() => {
+            feature.style.opacity = '1';
+            feature.style.transform = 'translateY(0)';
+        }, 200 + (index * 100));
+    });
+});
+
+// Validation des mots de passe
+document.getElementById('new_password').addEventListener('input', function() {
+    const password = this.value;
+    const hints = document.querySelectorAll('.form-hint');
+    
+    let valid = true;
+    if (password.length < 8) valid = false;
+    if (!/[A-Z]/.test(password)) valid = false;
+    if (!/[0-9]/.test(password)) valid = false;
+    
+    hints.forEach(hint => {
+        hint.style.color = valid ? '#10B981' : '#EF4444';
+    });
+});
+
+// Vérification de la correspondance
+document.getElementById('confirm_password').addEventListener('input', function() {
+    const newPassword = document.getElementById('new_password').value;
+    const confirmPassword = this.value;
+    
+    if (confirmPassword && newPassword !== confirmPassword) {
+        this.style.borderColor = '#EF4444';
+    } else {
+        this.style.borderColor = '';
+    }
+});
+
+// Focus sur le premier champ
+document.getElementById('new_password')?.focus();
+</script>
+
+<?php
+require_once 'footer_conn.php';
+?>

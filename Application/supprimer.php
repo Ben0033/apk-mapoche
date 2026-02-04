@@ -1,36 +1,70 @@
 <?php
-require 'config.php';
-session_start();
+require_once 'includes/bootstrap.php';
 
-// Vérifiez si l'utilisateur est connecté
-if (!isset($_SESSION['id_user'])) {
-    header('Location: connexion.php');
-    exit;
-}
+Auth::requireLogin();
 
-// Récupérez les paramètres depuis l'URL
+// Récupérer les paramètres depuis l'URL
 $id = $_GET['id'] ?? null;
 $type = $_GET['type'] ?? null;
 
 if ($id && $type) {
     try {
-        if ($type === 'Revenu') {
-            // Supprimer depuis la table revenue
-            $stmt = $conn->prepare("DELETE FROM revenue WHERE id_revenu = :id AND id_user = :id_user");
-        } elseif ($type === 'Depense') {
-            // Supprimer depuis la table depense
-            $stmt = $conn->prepare("DELETE FROM depense WHERE id_depense = :id AND id_user = :id_user");
-        } else {
+        // Valider les paramètres
+        if (!validatePositiveInt($id)) {
+            throw new Exception("ID invalide");
+        }
+        
+        if (!in_array($type, ['Revenu', 'Depense'])) {
             throw new Exception("Type invalide");
         }
 
-        $stmt->execute(['id' => $id, 'id_user' => $_SESSION['id_user']]);
+        // Vérifier que la transaction appartient bien à l'utilisateur
+        if ($type === 'Revenu') {
+            $check = Database::getInstance()->fetch(
+                "SELECT id_revenu FROM revenue WHERE id_revenu = ? AND id_user = ?",
+                [$id, Auth::userId()]
+            );
+            
+            if (!$check) {
+                throw new Exception("Transaction non trouvée");
+            }
+            
+            Database::getInstance()->execute(
+                "DELETE FROM revenue WHERE id_revenu = ? AND id_user = ?",
+                [$id, Auth::userId()]
+            );
+            
+            logAction('REVENUE_DELETED', ['id' => $id]);
+        } elseif ($type === 'Depense') {
+            $check = Database::getInstance()->fetch(
+                "SELECT id_depense FROM depense WHERE id_depense = ? AND id_user = ?",
+                [$id, Auth::userId()]
+            );
+            
+            if (!$check) {
+                throw new Exception("Transaction non trouvée");
+            }
+            
+            Database::getInstance()->execute(
+                "DELETE FROM depense WHERE id_depense = ? AND id_user = ?",
+                [$id, Auth::userId()]
+            );
+            
+            logAction('EXPENSE_DELETED', ['id' => $id]);
+        }
+
+        // Rediriger vers l'historique avec un message de succès
+        $_SESSION['success_message'] = 'Transaction supprimée avec succès!';
         header('Location: historique.php');
         exit;
     } catch (Exception $e) {
-        echo "Erreur : " . htmlspecialchars($e->getMessage());
+        $_SESSION['error_message'] = $e->getMessage();
+        header('Location: historique.php');
+        exit;
     }
 } else {
-    echo "Paramètres invalides.";
+    $_SESSION['error_message'] = 'Paramètres invalides';
+    header('Location: historique.php');
+    exit;
 }
 ?>
