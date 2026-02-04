@@ -1,5 +1,5 @@
 <?php 
-session_start();
+// Session already started in bootstrap.php
 $title = isset($title) ? $title : "MaPoche"; 
 ?>
 <!DOCTYPE html>

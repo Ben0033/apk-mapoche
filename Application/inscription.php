@@ -1,87 +1,101 @@
 <?php
+require_once 'includes/bootstrap.php';
+
 $title = "Inscription";
-require_once 'header_conn.php';
-require 'config.php';
+Auth::requireLogout(); // Rediriger si déjà connecté
 
 $message = '';
+$message_type = '';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = filter_var($_POST['email_user'], FILTER_SANITIZE_EMAIL);
-    $password = $_POST['mot_de_passe_user'];
-    $nom = htmlspecialchars($_POST['nom_user']);
-    $prenom = htmlspecialchars($_POST['prenom_user']);
-    $confirmer_mot_de_passe = $_POST['confirmer_mot_de_passe_user'];
+    checkCSRF(); // Vérifier le token CSRF
 
-    // Gestion de l'upload de fichier
-    $photo = $_FILES['photo_user']['name'];
-    $photo_tmp = $_FILES['photo_user']['tmp_name'];
-    $photo_size = $_FILES['photo_user']['size'];
-    $photo_error = $_FILES['photo_user']['error'];
-    $photo_ext = strtolower(pathinfo($photo, PATHINFO_EXTENSION));
-    $allowed_ext = array('jpg', 'jpeg', 'png', 'gif');
-    $photo_new_name = uniqid('', true) . '.' . $photo_ext;
-    $photo_destination = 'uploads/' . $photo_new_name;
+    try {
+        // Récupérer et valider les inputs
+        $email = sanitizeEmail($_POST['email_user'] ?? '');
+        $password = $_POST['mot_de_passe_user'] ?? '';
+        $confirm_password = $_POST['confirmer_mot_de_passe_user'] ?? '';
+        $nom = sanitize($_POST['nom_user'] ?? '');
+        $prenom = sanitize($_POST['prenom_user'] ?? '');
 
-    if (in_array($photo_ext, $allowed_ext) && $photo_size <= 2000000 && $photo_error === 0) {
-        move_uploaded_file($photo_tmp, $photo_destination);
-    } else {
-        $message = "Erreur lors du téléversement de la photo";
-    }
-
-    // verifie le si l'email existe déjà
-    $stmt = $conn->prepare("SELECT * FROM users WHERE email_user = :mail");
-    $stmt->bindParam(':mail', $username);
-    $stmt->execute();
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($user) {
-        $message = "L'email existe déjà";
-    } else {
-        if (!empty($username) && !empty($password) && !empty($nom) && !empty($prenom) && !empty($photo) && !empty($confirmer_mot_de_passe)) {
-            if ($password !== $confirmer_mot_de_passe) {
-                $message = "Les mots de passe ne correspondent pas";
-            } else {
-                $password = password_hash($password, PASSWORD_BCRYPT);
-
-                // ajouter l'utilisateur à la base de données
-                $stmt = $conn->prepare("INSERT INTO users (email_user, mot_de_passe_user, nom_user, prenom_user, photo_user) VALUES (:mail, :pwd, :nom, :prenom, :photo)");
-                $stmt->bindParam(':mail', $username);
-                $stmt->bindParam(':pwd', $password);
-                $stmt->bindParam(':nom', $nom);
-                $stmt->bindParam(':prenom', $prenom);
-                $stmt->bindParam(':photo', $photo_new_name);
-
-                if ($stmt->execute()) {
-                    $message = "Inscription réussie";
-                     // Reset form fields
-                        $username = '';
-                        $password = '';
-                        $nom = '';
-                        $prenom = '';
-                        $confirmer_mot_de_passe = '';
-                        $photo = '';
-                        header('Location: connexion.php');
-                        exit;
-                } else {
-                    $message = "Inscription échouée";
-                }
-            }
-        } else {
-            $message = "Veuillez remplir tous les champs";
+        // Valider les champs
+        if (empty($email) || empty($password) || empty($nom) || empty($prenom)) {
+            throw new Exception('Tous les champs sont obligatoires');
         }
+
+        if (!validateEmail($email)) {
+            throw new Exception('Email invalide');
+        }
+
+        if ($password !== $confirm_password) {
+            throw new Exception('Les mots de passe ne correspondent pas');
+        }
+
+        // Gérer l'upload de photo
+        $photo_path = null;
+        if (isset($_FILES['photo_user']) && $_FILES['photo_user']['error'] === UPLOAD_ERR_OK) {
+            $file = $_FILES['photo_user'];
+
+            // Vérifier la taille
+            if ($file['size'] > MAX_UPLOAD_SIZE) {
+                throw new Exception('Le fichier est trop volumineux (max ' . (MAX_UPLOAD_SIZE / 1024 / 1024) . ' MB)');
+            }
+
+            // Vérifier l'extension
+            if (!validateImageExtension($file['name'])) {
+                throw new Exception('Format d\'image non accepté');
+            }
+
+            // Vérifier le type MIME
+            if (!validateImageMimeType($file['tmp_name'])) {
+                throw new Exception('Le fichier n\'est pas une image valide');
+            }
+
+            // Générer un nom sécurisé
+            $photo_path = generateSafeFilename($file['name']);
+            $upload_path = UPLOAD_DIR . $photo_path;
+
+            // Créer le dossier s'il n'existe pas
+            if (!is_dir(UPLOAD_DIR)) {
+                mkdir(UPLOAD_DIR, 0755, true);
+            }
+
+            // Déplacer le fichier
+            if (!move_uploaded_file($file['tmp_name'], $upload_path)) {
+                throw new Exception('Erreur lors du téléversement de la photo');
+            }
+        }
+
+        // Enregistrer l'utilisateur
+        Auth::register($email, $password, $nom, $prenom, $photo_path);
+
+        $message = 'Inscription réussie! Redirection vers la connexion...';
+        $message_type = 'success';
+
+        // Rediriger vers la connexion après 2 secondes
+        header('Refresh: 2; URL=connexion.php');
+    } catch (Exception $e) {
+        $message = $e->getMessage();
+        $message_type = 'error';
+        logAction('REGISTRATION_FAILED', ['error' => $e->getMessage()]);
     }
 }
+
+require_once 'header_conn.php';
 ?>
 <form class="connexion" action="" method="post" enctype="multipart/form-data">
-    <input type="text" placeholder="NOM" required="required" name="nom_user">
-    <input type="text" placeholder="PRENOM" required="required" name="prenom_user">
-    <input type="email" placeholder="Email" required="required" name="email_user">
-    <input type="password" placeholder="Mots De Passe" required="required" name="mot_de_passe_user">
+    <input type="hidden" name="csrf_token" value="<?= getCSRFToken() ?>">
+    <input type="text" placeholder="NOM" required="required" name="nom_user" value="<?= sanitize($_POST['nom_user'] ?? '') ?>">
+    <input type="text" placeholder="PRENOM" required="required" name="prenom_user" value="<?= sanitize($_POST['prenom_user'] ?? '') ?>">
+    <input type="email" placeholder="Email" required="required" name="email_user" value="<?= sanitize($_POST['email_user'] ?? '') ?>">
+    <input type="password" placeholder="Mot de passe" required="required" name="mot_de_passe_user">
     <input type="password" placeholder="Confirmer le mot de passe" required="required" name="confirmer_mot_de_passe_user">
-    <input type="file" name="photo_user" required="required" >
+    <input type="file" name="photo_user" accept="image/*" required="required">
 
     <?php if (!empty($message)): ?>
-      <p id="message"><?=$message?></p>
+        <?php echo ($message_type === 'success') ? displaySuccess($message) : displayError($message); ?>
     <?php endif; ?>
+
     <button type="submit">Créer</button>
     <p>Vous avez déjà un compte ? <a href="connexion.php">Se Connecter</a></p>
 </form>

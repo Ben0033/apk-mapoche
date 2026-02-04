@@ -1,63 +1,87 @@
 <?php
+require_once 'includes/bootstrap.php';
+
 $title = "Accueil";
+Auth::requireLogin(); // Rediriger si non connecté
+
 require_once 'header.php';
-require_once 'config.php';
 
-// Vérifiez si l'utilisateur est connecté
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $type = $_POST['type'] ?? null;
-    $montant = $_POST['montant'] ?? null;
-    $description = $_POST['description'] ?? null;
-    $categorie = $_POST['categorie'] ?? null;
-    $id_user = $_SESSION['id_user'] ?? null; // ID de l'utilisateur connecté
-} else {
-    $type = null;
-    $montant = null;
-    $description = null;
-    $categorie = null;
-}
+$message = '';
+$message_type = '';
+$type = null;
+$montant = null;
+$description = null;
+$categorie = null;
 
-// Récupérer les catégories depuis la base de données
+// Récupérer les catégories
 try {
-    $sql = "SELECT id_cat, nom_cat FROM categorie";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    $categories = $stmt->fetchAll(PDO::FETCH_ASSOC); // Récupère les catégories sous forme de tableau associatif
-} catch (PDOException $e) {
+    $categories = Database::getInstance()->fetchAll(
+        "SELECT id_cat, nom_cat FROM categorie ORDER BY nom_cat ASC"
+    );
+} catch (Exception $e) {
     $categories = [];
-    $message = "Erreur lors de la récupération des catégories : " . $e->getMessage();
+    $message = 'Erreur lors du chargement des catégories';
+    $message_type = 'error';
 }
-// enregistrement de la dépense ou du revenu
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if ($type === 'dépense') {
-        $sql = "INSERT INTO depense (montant_depense, date_depense,description_depense, id_cat, id_user) VALUES (:montant, now(),:description, :categorie, :id_user)";
-    } elseif ($type === 'revenu') {
-        $sql = "INSERT INTO revenue (montant_revenu, date_revenu,description_revenu, id_user) VALUES (:montant, now(),:description, :id_user)";
-    } else {
-        $message = "Type d'enregistrement invalide.";
-    }
-    // Vérifiez si le montant est supérieur à 0
-    if ($montant <= 0) {
-        $message = "Le montant doit être supérieur à 0.";
-    }
 
-    if (isset($sql)) {
-        try {
-            $stmt = $conn->prepare($sql);
-            if ($type === 'dépense') {
-                $stmt->bindParam(':categorie', $categorie);
-            }
-            $stmt->bindParam(':montant', $montant);
-            $stmt->bindParam(':description', $description);
-            $stmt->bindParam(':id_user', $id_user);
-            if ($stmt->execute()) {
-                $message = "Enregistrement réussi.";
-            } else {
-                $message = "Erreur lors de l'enregistrement.";
-            }
-        } catch (PDOException $e) {
-            $message = "Erreur lors de l'enregistrement : " . $e->getMessage();
+// Traiter le formulaire
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    checkCSRF(); // Vérifier CSRF
+
+    try {
+        $type = sanitize($_POST['type'] ?? '');
+        $montant = $_POST['montant'] ?? '';
+        $description = sanitize($_POST['description'] ?? '');
+        $categorie = sanitize($_POST['categorie'] ?? '');
+        $id_user = Auth::userId();
+
+        // Valider le type
+        if (!in_array($type, ['dépense', 'revenu'])) {
+            throw new Exception('Type d\'enregistrement invalide');
         }
+
+        // Valider montant et description
+        $validation_errors = validateTransaction($montant, $description);
+        if (!empty($validation_errors)) {
+            throw new Exception(implode(', ', $validation_errors));
+        }
+
+        // Insérer la transaction
+        if ($type === 'dépense') {
+            if (empty($categorie) || !validatePositiveInt($categorie)) {
+                throw new Exception('Catégorie invalide');
+            }
+
+            Database::getInstance()->execute(
+                'INSERT INTO depense (montant_depense, date_depense, description_depense, id_cat, id_user) 
+                 VALUES (?, NOW(), ?, ?, ?)',
+                [$montant, $description, $categorie, $id_user]
+            );
+
+            $message = '✓ Dépense enregistrée avec succès';
+            $message_type = 'success';
+            logAction('EXPENSE_ADDED', ['montant' => $montant, 'categorie' => $categorie]);
+        } else { // revenu
+            Database::getInstance()->execute(
+                'INSERT INTO revenue (montant_revenu, date_revenu, description_revenu, id_user) 
+                 VALUES (?, NOW(), ?, ?)',
+                [$montant, $description, $id_user]
+            );
+
+            $message = '✓ Revenu enregistré avec succès';
+            $message_type = 'success';
+            logAction('REVENUE_ADDED', ['montant' => $montant]);
+        }
+
+        // Reset les champs après succès
+        $type = null;
+        $montant = null;
+        $description = null;
+        $categorie = null;
+    } catch (Exception $e) {
+        $message = $e->getMessage();
+        $message_type = 'error';
+        logAction('TRANSACTION_FAILED', ['error' => $e->getMessage()]);
     }
 }
 
@@ -69,6 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p>MaPoche vous permet d'enregistrer vos dépenses et vos revenus, mais aussi d'en garder une historique.</p>
     </div>
     <form id="formulaire" method="post" action="index.php" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="<?= getCSRFToken() ?>">
         <h2>Gérer vos Dépenses et Revenus</h2>
         <h4>Ajouter une Dépense ou un Revenu</h4>
         <div class="scroll-text">
@@ -107,10 +132,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <br><br>
 
         <?php if (!empty($message)): ?>
-            <p id="message"><?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8') ?></p>
+            <?= ($message_type === 'success') ? displaySuccess($message) : displayError($message) ?>
         <?php endif; ?>
         <div class="linkAjoutCat" id="ajout">
-            <a id="linkAC" href="ajoutCat.php"style="text-decoration:none;">Ajouter une catégorie</a>
+            <a id="linkAC" href="ajoutCat.php" style="text-decoration:none;">Ajouter une catégorie</a>
         </div>
         <div class="btn">
             <button type="submit">Valider</button>

@@ -1,41 +1,46 @@
 <?php
+require_once 'includes/bootstrap.php';
+
 $title = "connexion";
- require_once 'he.php';
-session_start();
-require 'config.php';
+Auth::requireLogout(); // Rediriger si déjà connecté
 
 $message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = filter_var($_POST['email_user'], FILTER_SANITIZE_EMAIL);
-    $password = $_POST['mot_de_passe_user'];
-
-    $stmt = $conn->prepare("SELECT id_user, email_user, mot_de_passe_user , nom_user , prenom_user, photo_user FROM users WHERE email_user = :mail");
-    $stmt->bindParam(':mail', $username);
-    $stmt->execute();
-
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    if ($user && password_verify($password, $user['mot_de_passe_user'])) {
-        // Set session variables
-        $_SESSION['id_user'] = $user['id_user'];
-        $_SESSION['email_user'] = $user['email_user']; 
-        $_SESSION['nom_user'] = $user['nom_user'];
-        $_SESSION['prenom_user'] = $user['prenom_user'];
-        $_SESSION['photo_user'] = $user['photo_user'];
+    checkCSRF(); // Vérifier le token CSRF
     
+    try {
+        $email = sanitizeEmail($_POST['email_user'] ?? '');
+        $password = $_POST['mot_de_passe_user'] ?? '';
 
+        if (empty($email) || empty($password)) {
+            throw new Exception('Email et mot de passe sont requis');
+        }
 
-        // Redirect to index.php
-        header('Location: index.php');
-        exit;
-    } else {
-        $message = "Nom d'utilisateur ou mot de passe incorrect";
+        if (!validateEmail($email)) {
+            throw new Exception('Email invalide');
+        }
+
+        // Tenter la connexion
+        Auth::login($email, $password);
+        
+        $message = 'Connexion réussie! Redirection...';
+        $message_type = 'success';
+        
+        // Rediriger vers index.php après 2 secondes
+        header('Refresh: 2; URL=index.php');
+    } catch (Exception $e) {
+        $message = $e->getMessage();
+        logAction('LOGIN_FAILED', ['email' => $email, 'error' => $e->getMessage()]);
     }
 }
+
+require_once 'header_conn.php';
 ?>
 <form class="connexion" action="" method="post">
+    <input type="hidden" name="csrf_token" value="<?= getCSRFToken() ?>">
     <h2>CONNEXION A VOTRE COMPTE</h2>
 
-    <input type="email" name="email_user" placeholder="Email" required="required" value="<?= htmlspecialchars($_POST['email_user'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+    <input type="email" name="email_user" placeholder="Email" required="required" value="<?= sanitize($_POST['email_user'] ?? '') ?>">
 
     <input type="password" name="mot_de_passe_user" placeholder="Mot de passe" required="required">
 
@@ -47,13 +52,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <?php if (!empty($message)): ?>
-        <p id="message"><?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8') ?></p>
+        <?= displayError($message) ?>
     <?php endif; ?>
 
     <button type="submit">Se Connecter</button>
 
     <p>Vous n'avez pas de compte ? <a href="inscription.php">Créer un compte</a></p>
 </form>
- <?php
-require_once 'p.php';
-?> 
+<?php
+require_once 'footer_conn.php';
+?>

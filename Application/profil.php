@@ -1,17 +1,17 @@
 <?php
+require_once 'includes/bootstrap.php';
+
 $title = "Profil";
+Auth::requireLogin(); // Rediriger si non connecté
+
 require_once 'header.php';
 
-// Vérifiez si l'utilisateur est connecté
-if (!isset($_SESSION['id_user'])) {
-    header('Location: connexion.php');
-    exit;
-}
-
 // Récupérez les informations de l'utilisateur depuis la session
-$nom = $_SESSION['nom_user'] ?? 'Nom';
-$prenom = $_SESSION['prenom_user'] ?? 'Prénom';
-$photo = $_SESSION['photo_user'] ?? 'default.png'; 
+$user = Auth::user();
+$nom = $user['nom_user'] ?? 'Nom';
+$prenom = $user['prenom_user'] ?? 'Prénom';
+$photo = $user['photo_user'] ?? 'default.png';
+$email = $user['email_user'] ?? '';
 ?>
 <div class="img_profil">
     <img src="uploads/<?= htmlspecialchars($photo, ENT_QUOTES, 'UTF-8') ?>" alt="image de profil" class="photo-profil">
@@ -29,19 +29,19 @@ $photo = $_SESSION['photo_user'] ?? 'default.png';
             <button type="submit">Envoyer</button>
         </form>
     </div>
-    
+
     <!-- <h3>Mes activités récentes</h3>
     <ul>
         <li>Connexion le <?= htmlspecialchars($_SESSION['dernier_acces'] ?? 'Non disponible', ENT_QUOTES, 'UTF-8') ?></li>
         <!-- Ajoute ici des activités dynamiques si tu en as -->
-    </ul> 
+    </ul>
 </div>
 <div class="img_profil">
     <div class="pro">
-            <a href="modifier_profil.php" class="btns">Modifier mon profil</a>
-            <a href="changer_mdp.php" class="btns">Changer mon mot de passe</a>
-            <a href="supprimer_compte.php" class="btns" onclick="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.');">Supprimer mon compte</a>
-            <a href="logout.php" class="btns">Se déconnecter</a>
+        <a href="modifier_profil.php" class="btns">Modifier mon profil</a>
+        <a href="changer_mdp.php" class="btns">Changer mon mot de passe</a>
+        <a href="supprimer_compte.php" class="btns" onclick="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.');">Supprimer mon compte</a>
+        <a href="logout.php" class="btns">Se déconnecter</a>
     </div>
 </div>
 <?php

@@ -1,33 +1,40 @@
 <?php
 
-require_once 'header.php';
+require_once 'includes/bootstrap.php';
 
-if (!isset($_SESSION['id_user'])) {
-    header('Location: connexion.php');
-    exit;
-}
+Auth::requireLogin();
 
 $message = '';
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $ancien = $_POST['ancien'] ?? '';
-    $nouveau = $_POST['nouveau'] ?? '';
-    $confirmer = $_POST['confirmer'] ?? '';
+$message_type = '';
 
-    // À adapter : vérifier l'ancien mot de passe en base de données
-    // Ici, on suppose que le mot de passe est "demo" pour l'exemple
-    if ($ancien !== 'demo') {
-        $message = "Ancien mot de passe incorrect.";
-    } elseif ($nouveau !== $confirmer) {
-        $message = "Les nouveaux mots de passe ne correspondent pas.";
-    } else {
-        // Mettre à jour le mot de passe en base de données ici
-        $message = "Mot de passe changé avec succès.";
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    checkCSRF();
+    
+    try {
+        $ancien = $_POST['ancien'] ?? '';
+        $nouveau = $_POST['nouveau'] ?? '';
+        $confirmer = $_POST['confirmer'] ?? '';
+
+        Auth::changePassword($ancien, $nouveau, $confirmer);
+        
+        $message = 'Mot de passe changé avec succès!';
+        $message_type = 'success';
+    } catch (Exception $e) {
+        $message = $e->getMessage();
+        $message_type = 'error';
     }
 }
+
+require_once 'header.php';
 ?>
 <h2>Changer mon mot de passe</h2>
-<?php if ($message) echo "<p>$message</p>"; ?>
+
+<?php if (!empty($message)): ?>
+    <?= $message_type === 'success' ? displaySuccess($message) : displayError($message) ?>
+<?php endif; ?>
+
 <form method="post">
+    <input type="hidden" name="csrf_token" value="<?= getCSRFToken() ?>">
     <label>Ancien mot de passe : <input type="password" name="ancien" required></label><br>
     <label>Nouveau mot de passe : <input type="password" name="nouveau" required></label><br>
     <label>Confirmer le nouveau : <input type="password" name="confirmer" required></label><br>

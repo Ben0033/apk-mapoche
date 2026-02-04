@@ -1,0 +1,117 @@
+[04-Feb-2026 01:32:35 UTC] PHP Warning:  The magic method Database::__wakeup() must have public visibility in C:\wamp64\www\apk-mapoche\Application\includes\database.php on line 104
+[04-Feb-2026 01:32:35 UTC] PHP Stack trace:
+[04-Feb-2026 01:32:35 UTC] PHP   1. {main}() C:\wamp64\www\apk-mapoche\Application\index.php:0
+[04-Feb-2026 01:32:35 UTC] PHP   2. require_once() C:\wamp64\www\apk-mapoche\Application\index.php:2
+[04-Feb-2026 01:32:35 UTC] PHP Fatal error:  Uncaught Error: Cannot access private property Database::$pdo in C:\wamp64\www\apk-mapoche\Application\includes\database.php:108
+Stack trace:
+#0 C:\wamp64\www\apk-mapoche\Application\includes\bootstrap.php(11): require_once()
+#1 C:\wamp64\www\apk-mapoche\Application\index.php(2): require_once('C:\\wamp64\\www\\a...')
+#2 {main}
+  thrown in C:\wamp64\www\apk-mapoche\Application\includes\database.php on line 108
+[04-Feb-2026 01:32:37 UTC] PHP Fatal error:  Uncaught Error: Cannot access private property Database::$pdo in C:\wamp64\www\apk-mapoche\Application\includes\database.php:108
+Stack trace:
+#0 C:\wamp64\www\apk-mapoche\Application\includes\bootstrap.php(11): require_once()
+#1 C:\wamp64\www\apk-mapoche\Application\index.php(2): require_once('C:\\wamp64\\www\\a...')
+#2 {main}
+  thrown in C:\wamp64\www\apk-mapoche\Application\includes\database.php on line 108
+[04-Feb-2026 01:32:40 UTC] PHP Fatal error:  Uncaught Error: Cannot access private property Database::$pdo in C:\wamp64\www\apk-mapoche\Application\includes\database.php:108
+Stack trace:
+#0 C:\wamp64\www\apk-mapoche\Application\includes\bootstrap.php(11): require_once()
+#1 C:\wamp64\www\apk-mapoche\Application\index.php(2): require_once('C:\\wamp64\\www\\a...')
+#2 {main}
+  thrown in C:\wamp64\www\apk-mapoche\Application\includes\database.php on line 108
+[04-Feb-2026 01:32:41 UTC] PHP Fatal error:  Uncaught Error: Cannot access private property Database::$pdo in C:\wamp64\www\apk-mapoche\Application\includes\database.php:108
+Stack trace:
+#0 C:\wamp64\www\apk-mapoche\Application\includes\bootstrap.php(11): require_once()
+#1 C:\wamp64\www\apk-mapoche\Application\index.php(2): require_once('C:\\wamp64\\www\\a...')
+#2 {main}
+  thrown in C:\wamp64\www\apk-mapoche\Application\includes\database.php on line 108
+[04-Feb-2026 01:36:23 UTC] PHP Warning:  The magic method Database::__wakeup() must have public visibility in C:\wamp64\www\apk-mapoche\Application\includes\database.php on line 115
+[04-Feb-2026 01:36:23 UTC] PHP Stack trace:
+[04-Feb-2026 01:36:23 UTC] PHP   1. {main}() C:\wamp64\www\apk-mapoche\Application\index.php:0
+[04-Feb-2026 01:36:23 UTC] PHP   2. require_once() C:\wamp64\www\apk-mapoche\Application\index.php:2
+[04-Feb-2026 01:36:23 UTC] PHP Fatal error:  Uncaught Error: Cannot access private property Database::$pdo in C:\wamp64\www\apk-mapoche\Application\includes\database.php:119
+Stack trace:
+#0 C:\wamp64\www\apk-mapoche\Application\includes\bootstrap.php(12): require_once()
+#1 C:\wamp64\www\apk-mapoche\Application\index.php(2): require_once('C:\\wamp64\\www\\a...')
+#2 {main}
+  thrown in C:\wamp64\www\apk-mapoche\Application\includes\database.php on line 119
+[04-Feb-2026 01:42:43 UTC] PHP Fatal error:  Uncaught Error: Cannot access private property Database::$pdo in C:\wamp64\www\apk-mapoche\Application\includes\database.php:119
+Stack trace:
+#0 C:\wamp64\www\apk-mapoche\Application\includes\bootstrap.php(12): require_once()
+#1 C:\wamp64\www\apk-mapoche\Application\index.php(2): require_once('C:\\wamp64\\www\\a...')
+#2 {main}
+  thrown in C:\wamp64\www\apk-mapoche\Application\includes\database.php on line 119
+[04-Feb-2026 01:42:44 UTC] PHP Fatal error:  Uncaught Error: Cannot access private property Database::$pdo in C:\wamp64\www\apk-mapoche\Application\includes\database.php:119
+Stack trace:
+#0 C:\wamp64\www\apk-mapoche\Application\includes\bootstrap.php(12): require_once()
+#1 C:\wamp64\www\apk-mapoche\Application\index.php(2): require_once('C:\\wamp64\\www\\a...')
+#2 {main}
+  thrown in C:\wamp64\www\apk-mapoche\Application\includes\database.php on line 119
+[04-Feb-2026 01:42:44 UTC] PHP Fatal error:  Uncaught Error: Cannot access private property Database::$pdo in C:\wamp64\www\apk-mapoche\Application\includes\database.php:119
+Stack trace:
+#0 C:\wamp64\www\apk-mapoche\Application\includes\bootstrap.php(12): require_once()
+#1 C:\wamp64\www\apk-mapoche\Application\index.php(2): require_once('C:\\wamp64\\www\\a...')
+#2 {main}
+  thrown in C:\wamp64\www\apk-mapoche\Application\includes\database.php on line 119
+[04-Feb-2026 01:45:09 UTC] PHP Fatal error:  Uncaught Error: Cannot access private property Database::$pdo in C:\wamp64\www\apk-mapoche\Application\includes\database.php:119
+Stack trace:
+#0 C:\wamp64\www\apk-mapoche\Application\includes\bootstrap.php(12): require_once()
+#1 Command line code(1): require_once('C:\\wamp64\\www\\a...')
+#2 {main}
+  thrown in C:\wamp64\www\apk-mapoche\Application\includes\database.php on line 119
+[04-Feb-2026 01:45:13 UTC] PHP Fatal error:  Uncaught Error: Cannot access private property Database::$pdo in C:\wamp64\www\apk-mapoche\Application\includes\database.php:119
+Stack trace:
+#0 C:\wamp64\www\apk-mapoche\Application\includes\bootstrap.php(12): require_once()
+#1 C:\wamp64\www\apk-mapoche\Application\index.php(2): require_once('C:\\wamp64\\www\\a...')
+#2 {main}
+  thrown in C:\wamp64\www\apk-mapoche\Application\includes\database.php on line 119
+[04-Feb-2026 01:45:52 UTC] PHP Fatal error:  Uncaught Error: Cannot access private property Database::$pdo in C:\wamp64\www\apk-mapoche\Application\includes\database.php:119
+Stack trace:
+#0 C:\wamp64\www\apk-mapoche\Application\includes\bootstrap.php(12): require_once()
+#1 C:\wamp64\www\apk-mapoche\Application\test_db.php(3): require_once('C:\\wamp64\\www\\a...')
+#2 {main}
+  thrown in C:\wamp64\www\apk-mapoche\Application\includes\database.php on line 119
+[04-Feb-2026 01:45:56 UTC] PHP Fatal error:  Uncaught Error: Cannot access private property Database::$pdo in C:\wamp64\www\apk-mapoche\Application\includes\database.php:119
+Stack trace:
+#0 C:\wamp64\www\apk-mapoche\Application\includes\bootstrap.php(12): require_once()
+#1 C:\wamp64\www\apk-mapoche\Application\test_db.php(3): require_once('C:\\wamp64\\www\\a...')
+#2 {main}
+  thrown in C:\wamp64\www\apk-mapoche\Application\includes\database.php on line 119
+[04-Feb-2026 01:46:03 UTC] PHP Fatal error:  Uncaught Error: Cannot access private property Database::$pdo in C:\wamp64\www\apk-mapoche\Application\includes\database.php:119
+Stack trace:
+#0 C:\wamp64\www\apk-mapoche\Application\includes\bootstrap.php(12): require_once()
+#1 C:\wamp64\www\apk-mapoche\Application\test_db.php(3): require_once('C:\\wamp64\\www\\a...')
+#2 {main}
+  thrown in C:\wamp64\www\apk-mapoche\Application\includes\database.php on line 119
+[04-Feb-2026 01:46:05 UTC] PHP Fatal error:  Uncaught Error: Cannot access private property Database::$pdo in C:\wamp64\www\apk-mapoche\Application\includes\database.php:119
+Stack trace:
+#0 C:\wamp64\www\apk-mapoche\Application\includes\bootstrap.php(12): require_once()
+#1 C:\wamp64\www\apk-mapoche\Application\test_db.php(3): require_once('C:\\wamp64\\www\\a...')
+#2 {main}
+  thrown in C:\wamp64\www\apk-mapoche\Application\includes\database.php on line 119
+[04-Feb-2026 01:49:00 UTC] PHP Warning:  session_set_cookie_params(): Session cookie parameters cannot be changed after headers have already been sent in C:\wamp64\www\apk-mapoche\Application\includes\config.php on line 45
+[04-Feb-2026 01:49:00 UTC] PHP Stack trace:
+[04-Feb-2026 01:49:00 UTC] PHP   1. {main}() C:\wamp64\www\apk-mapoche\Application\debug_bootstrap.php:0
+[04-Feb-2026 01:49:00 UTC] PHP   2. require_once() C:\wamp64\www\apk-mapoche\Application\debug_bootstrap.php:8
+[04-Feb-2026 01:49:00 UTC] PHP   3. require_once() C:\wamp64\www\apk-mapoche\Application\includes\bootstrap.php:9
+[04-Feb-2026 01:49:00 UTC] PHP   4. session_set_cookie_params($lifetime_or_options = ['lifetime' => 3600, 'path' => '/', 'secure' => FALSE, 'httponly' => TRUE, 'samesite' => 'Lax']) C:\wamp64\www\apk-mapoche\Application\includes\config.php:45
+[04-Feb-2026 01:49:00 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in C:\wamp64\www\apk-mapoche\Application\includes\config.php on line 52
+[04-Feb-2026 01:49:00 UTC] PHP Stack trace:
+[04-Feb-2026 01:49:00 UTC] PHP   1. {main}() C:\wamp64\www\apk-mapoche\Application\debug_bootstrap.php:0
+[04-Feb-2026 01:49:00 UTC] PHP   2. require_once() C:\wamp64\www\apk-mapoche\Application\debug_bootstrap.php:8
+[04-Feb-2026 01:49:00 UTC] PHP   3. require_once() C:\wamp64\www\apk-mapoche\Application\includes\bootstrap.php:9
+[04-Feb-2026 01:49:00 UTC] PHP   4. session_start() C:\wamp64\www\apk-mapoche\Application\includes\config.php:52
+[04-Feb-2026 01:49:17 UTC] PHP Warning:  session_set_cookie_params(): Session cookie parameters cannot be changed after headers have already been sent in C:\wamp64\www\apk-mapoche\Application\includes\config.php on line 45
+[04-Feb-2026 01:49:17 UTC] PHP Stack trace:
+[04-Feb-2026 01:49:17 UTC] PHP   1. {main}() C:\wamp64\www\apk-mapoche\Application\debug_bootstrap.php:0
+[04-Feb-2026 01:49:17 UTC] PHP   2. require_once() C:\wamp64\www\apk-mapoche\Application\debug_bootstrap.php:8
+[04-Feb-2026 01:49:17 UTC] PHP   3. require_once() C:\wamp64\www\apk-mapoche\Application\includes\bootstrap.php:9
+[04-Feb-2026 01:49:17 UTC] PHP   4. session_set_cookie_params($lifetime_or_options = ['lifetime' => 3600, 'path' => '/', 'secure' => FALSE, 'httponly' => TRUE, 'samesite' => 'Lax']) C:\wamp64\www\apk-mapoche\Application\includes\config.php:45
+[04-Feb-2026 01:49:17 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in C:\wamp64\www\apk-mapoche\Application\includes\config.php on line 52
+[04-Feb-2026 01:49:17 UTC] PHP Stack trace:
+[04-Feb-2026 01:49:17 UTC] PHP   1. {main}() C:\wamp64\www\apk-mapoche\Application\debug_bootstrap.php:0
+[04-Feb-2026 01:49:17 UTC] PHP   2. require_once() C:\wamp64\www\apk-mapoche\Application\debug_bootstrap.php:8
+[04-Feb-2026 01:49:17 UTC] PHP   3. require_once() C:\wamp64\www\apk-mapoche\Application\includes\bootstrap.php:9
+[04-Feb-2026 01:49:17 UTC] PHP   4. session_start() C:\wamp64\www\apk-mapoche\Application\includes\config.php:52
+{"timestamp":"2026-02-04 01:56:09","action":"EXPENSE_ADDED","user_id":2,"ip":"::1","details":{"montant":"5644800","categorie":"1"}}
