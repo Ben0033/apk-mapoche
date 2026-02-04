@@ -1323,6 +1323,42 @@ body {
     text-decoration: underline;
 }
 
+.auth-instructions {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.auth-instructions h4 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.auth-instructions ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.auth-instructions li {
+    padding: 8px 0;
+    color: #666;
+    font-size: 14px;
+    position: relative;
+    padding-left: 20px;
+}
+
+.auth-instructions li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #10B981;
+    font-weight: bold;
+}
+
 .auth-features {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
