@@ -7,6 +7,12 @@ Auth::requireLogin();
 $message = '';
 $message_type = '';
 
+// Gérer le message de succès via GET
+if (isset($_GET['success']) && $_GET['success'] == '1') {
+    $message = 'Mot de passe changé avec succès!';
+    $message_type = 'success';
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     checkCSRF();
     
@@ -19,6 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $message = 'Mot de passe changé avec succès!';
         $message_type = 'success';
+        
+        // Rediriger pour éviter la double soumission
+        header('Location: changer_mdp.php?success=1');
+        exit;
     } catch (Exception $e) {
         $message = $e->getMessage();
         $message_type = 'error';
@@ -75,6 +85,18 @@ require_once 'header.php';
                 <?php if (!empty($message)): ?>
                     <div class="message-container">
                         <?= $message_type === 'success' ? displaySuccess($message) : displayError($message) ?>
+                        
+                        <?php if ($message_type === 'success'): ?>
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    // Vider tous les champs du formulaire après changement réussi
+                                    const form = document.querySelector(".password-form");
+                                    if (form) {
+                                        form.reset();
+                                    }
+                                });
+                            </script>
+                        <?php endif; ?>
                     </div>
                 <?php endif; ?>
 

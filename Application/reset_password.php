@@ -61,6 +61,20 @@ require_once 'header_conn.php';
             <?php if (!empty($message)): ?>
                 <div class="message-container">
                     <?= $message_type === 'success' ? displaySuccess($message) : displayError($message) ?>
+                    
+                    <?php if ($message_type === 'success'): ?>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                // Vider le champ email après envoi réussi
+                                const form = document.querySelector(".auth-form");
+                                const input = document.getElementById("email_user");
+                                if (form && input) {
+                                    form.reset();
+                                    input.focus();
+                                }
+                            });
+                        </script>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
 

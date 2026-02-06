@@ -62,7 +62,19 @@ require_once 'header_conn.php';
 
             <?php if (!empty($message)): ?>
                 <div class="message-container">
-                    <?= displayError($message) ?>
+                    <?= ($message_type === 'success') ? displaySuccess($message) : displayError($message) ?>
+                    
+                    <?php if ($message_type === 'success'): ?>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                // Vider tous les champs du formulaire après connexion réussie
+                                const form = document.querySelector(".auth-form");
+                                if (form) {
+                                    form.reset();
+                                }
+                            });
+                        </script>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
 

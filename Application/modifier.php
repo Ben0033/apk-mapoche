@@ -11,6 +11,12 @@ $message = '';
 $message_type = '';
 $entry = null;
 
+// Gérer le message de succès via GET
+if (isset($_GET['success']) && $_GET['success'] == '1') {
+    $message = 'Transaction modifiée avec succès!';
+    $message_type = 'success';
+}
+
 if ($id && $type) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         checkCSRF();
@@ -50,8 +56,9 @@ if ($id && $type) {
             $message = 'Transaction modifiée avec succès!';
             $message_type = 'success';
             
-            // Rediriger après succès
-            header('Refresh: 2; URL=historique.php');
+            // Rediriger pour éviter la double soumission
+            header("Location: modifier.php?id=$id&type=$type&success=1");
+            exit;
         } catch (Exception $e) {
             $message = $e->getMessage();
             $message_type = 'error';
@@ -132,6 +139,18 @@ require_once 'header.php';
                 <?php if (!empty($message)): ?>
                     <div class="message-container">
                         <?= $message_type === 'success' ? displaySuccess($message) : displayError($message) ?>
+                        
+                        <?php if ($message_type === 'success'): ?>
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    // Vider le formulaire après modification réussie
+                                    const form = document.querySelector(".edit-form");
+                                    if (form) {
+                                        form.reset();
+                                    }
+                                });
+                            </script>
+                        <?php endif; ?>
                     </div>
                 <?php endif; ?>
 
@@ -143,7 +162,7 @@ require_once 'header.php';
                             <label for="montant" class="form-label">💶 Montant</label>
                             <input type="number" id="montant" name="montant" class="form-input" 
                                    value="<?= htmlspecialchars($entry['montant']) ?>" 
-                                   required step="0.01" min="0.01">
+                                   required step="0.01" min="0.01" placeholder="Montant (CFA)">
                         </div>
 
                         <div class="form-group">

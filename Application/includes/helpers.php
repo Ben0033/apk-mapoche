@@ -36,7 +36,51 @@ function getProfilePhotoPath($photo)
  */
 function formatAmount($amount)
 {
-    return number_format($amount, 2, ',', ' ') . ' €';
+    // Utiliser les constantes de configuration
+    $decimals = CURRENCY_DECIMALS;
+    $symbol = CURRENCY_SYMBOL;
+    
+    // Formater avec le séparateur de milliers approprié
+    if ($decimals === 0) {
+        // Pour le CFA, pas de décimales mais avec séparateur de milliers
+        $formatted = number_format($amount, 0, ',', ' ');
+    } else {
+        // Pour les autres devises avec décimales
+        $formatted = number_format($amount, $decimals, ',', ' ');
+    }
+    
+    return $formatted . ' ' . $symbol;
+}
+
+/**
+ * Obtenir les informations sur la devise actuelle
+ */
+function getCurrencyInfo()
+{
+    return [
+        'code' => DEFAULT_CURRENCY,
+        'symbol' => CURRENCY_SYMBOL,
+        'decimals' => CURRENCY_DECIMALS,
+        'name' => DEFAULT_CURRENCY === 'XOF' ? 'Franc CFA' : 'Euro'
+    ];
+}
+
+/**
+ * Formater un montant avec symbole avant (pour certains cas)
+ */
+function formatAmountSymbolFirst($amount)
+{
+    $info = getCurrencyInfo();
+    $decimals = $info['decimals'];
+    $symbol = $info['symbol'];
+    
+    if ($decimals === 0) {
+        $formatted = number_format($amount, 0, ',', ' ');
+    } else {
+        $formatted = number_format($amount, $decimals, ',', ' ');
+    }
+    
+    return $symbol . ' ' . $formatted;
 }
 
 /**
@@ -46,6 +90,65 @@ function formatDate($date, $format = 'd/m/Y H:i')
 {
     $dateTime = new DateTime($date);
     return $dateTime->format($format);
+}
+
+/**
+ * Obtenir les revenus et dépenses par jour pour les 30 derniers jours
+ */
+function getDailyTransactions($userId, $days = 30)
+{
+    $db = Database::getInstance();
+    
+    // Revenus par jour
+    $revenues = $db->fetchAll(
+        "SELECT DATE(date_revenu) as date, SUM(montant_revenu) as montant 
+         FROM revenue 
+         WHERE id_user = ? AND date_revenu >= DATE_SUB(CURDATE(), INTERVAL ? DAY)
+         GROUP BY DATE(date_revenu)
+         ORDER BY date",
+        [$userId, $days]
+    );
+    
+    // Dépenses par jour
+    $expenses = $db->fetchAll(
+        "SELECT DATE(date_depense) as date, SUM(montant_depense) as montant 
+         FROM depense 
+         WHERE id_user = ? AND date_depense >= DATE_SUB(CURDATE(), INTERVAL ? DAY)
+         GROUP BY DATE(date_depense)
+         ORDER BY date",
+        [$userId, $days]
+    );
+    
+    // Combiner les données
+    $data = [];
+    $dateRange = [];
+    
+    // Générer la plage de dates
+    for ($i = $days - 1; $i >= 0; $i--) {
+        $date = date('Y-m-d', strtotime("-$i days"));
+        $dateRange[$date] = [
+            'date' => $date,
+            'date_formatted' => date('d/m', strtotime($date)),
+            'revenue' => 0,
+            'expense' => 0
+        ];
+    }
+    
+    // Ajouter les revenus
+    foreach ($revenues as $revenue) {
+        if (isset($dateRange[$revenue['date']])) {
+            $dateRange[$revenue['date']]['revenue'] = (float)$revenue['montant'];
+        }
+    }
+    
+    // Ajouter les dépenses
+    foreach ($expenses as $expense) {
+        if (isset($dateRange[$expense['date']])) {
+            $dateRange[$expense['date']]['expense'] = (float)$expense['montant'];
+        }
+    }
+    
+    return array_values($dateRange);
 }
 
 /**

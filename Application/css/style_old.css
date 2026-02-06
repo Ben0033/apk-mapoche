@@ -1,0 +1,674 @@
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #f3e8ff 100%);
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  color: #1f2937;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  height: 75px;
+  background: linear-gradient(90deg, #7c3aed 0%, #6d28d9 100%);
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(124, 58, 237, 0.2);
+  align-items: center;
+}
+
+.hgauche img {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.hdroite ul {
+  display: flex;
+  list-style: none;
+  margin-right: 100px;
+}
+
+.hdroite ul li {
+  margin: 0px 60px;
+  padding: 9px 0;
+}
+
+.hdroite ul li a {
+  text-decoration: none;
+  color: rgb(187, 187, 187);
+  font-size: 25px;
+}
+
+.hdroite ul li a:hover {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 10px;
+  text-decoration: none;
+  transition: 0.5s;
+  font-size: 30px;
+  color: rgb(18, 24, 59);
+}
+
+.entt h1 {
+  text-align: center;
+  font-size: 40px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#ajouterbtn {
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: 100px;
+  margin-top: 10px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  padding: 10px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+  transition: all 0.3s ease;
+  border: none;
+}
+
+#ajouterbtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.h1 {
+  text-align: center;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.diva p {
+  font-size: 15px;
+  text-align: center;
+}
+section {
+  height: 100%;
+  margin-bottom: 100px;
+}
+
+/* Centrer le formulaire */
+form {
+  margin: auto;
+  padding: 30px;
+  border: none;
+  border-radius: 20px;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: white;
+  box-shadow: 0 20px 60px rgba(124, 58, 237, 0.15);
+}
+
+form p a {
+  text-decoration: none;
+  color: rgb(146, 13, 13);
+}
+
+form input[type="number"],
+form input[type="text"],
+form input[type="text-area"],
+form input[type="email"],
+form input[type="password"] {
+  width: 80%;
+  padding: 12px 15px;
+  margin: 10px 0;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background-color: #f9fafb;
+}
+
+form input[type="number"]:focus,
+form input[type="text"]:focus,
+form input[type="text-area"]:focus,
+form input[type="email"]:focus,
+form input[type="password"]:focus {
+  border-color: #7c3aed;
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  outline: none;
+}
+
+select {
+  width: 80%;
+  padding: 12px 15px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  background-color: #f9fafb;
+  transition: all 0.3s ease;
+  font-size: 16px;
+}
+
+select:focus {
+  border-color: #7c3aed;
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  outline: none;
+}
+
+/* Boutons uniformes */
+form button {
+  width: 25%;
+  padding: 12px 20px;
+  margin: 15px 5px;
+  font-size: 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  border: none;
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  color: white;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+}
+
+form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+}
+
+.btn {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.btns {
+  width: 20%;
+}
+/* Centrer les labels */
+form label {
+  width: 80%;
+  text-align: left;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #1f2937;
+}
+
+/* Afficher le champ catégorie correctement */
+#categorie {
+  display: none;
+  width: 80%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.colonne {
+  display: flex;
+  justify-content: space-between;
+  margin: 0px 100px;
+}
+
+footer {
+  background: linear-gradient(90deg, #7c3aed 0%, #6d28d9 100%);
+  height: 65px;
+  width: 100%;
+  position: fixed;
+  text-align: center;
+  bottom: 0;
+  color: white;
+  box-shadow: 0 -8px 32px rgba(124, 58, 237, 0.2);
+}
+
+.connexion {
+  margin-top: 100px;
+}
+.mtpp {
+  display: flex;
+  justify-content: space-between;
+  width: 60%;
+}
+
+.img_profil {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.img_profil img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  align-items: center;
+  border: 4px solid #7c3aed;
+  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.2);
+}
+.img_profil h1 {
+  font-size: 30px;
+  font-weight: bold;
+  background: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.img_profil p {
+  font-size: 20px;
+  font-weight: bold;
+  color: #6b7280;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.img_profil a {
+  text-decoration: none;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  transition: 0.3s;
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+}
+.img_profil a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(124, 58, 237, 0.4);
+}
+
+/* Styliser le tableau */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 20px 0;
+  font-size: 18px;
+  text-align: left;
+  box-shadow: 0 10px 40px rgba(124, 58, 237, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+thead {
+  background: linear-gradient(90deg, #7c3aed 0%, #6d28d9 100%);
+  color: white;
+}
+
+thead th {
+  padding: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+tbody tr:hover {
+  background-color: #f3e8ff;
+  cursor: pointer;
+}
+
+tbody td {
+  padding: 10px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Boutons d'action */
+.btn-danger,
+.btn-info {
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+  box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+}
+
+.btn-danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(236, 72, 153, 0.4);
+}
+
+.btn-info {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.btn-info:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+/* Légende */
+legend {
+  font-size: 20px;
+  font-weight: bold;
+  background: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  background-color: #f9fafb;
+}
+
+#message {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  padding: 15px;
+  border-radius: 12px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+#formulaire select {
+  width: 80%;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  background-color: #f9fafb;
+  transition: all 0.3s ease;
+}
+
+#formulaire select:focus {
+  border-color: #7c3aed;
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  outline: none;
+}
+
+#formulaire input[type="text"],
+#formulaire input[type="email"],
+#formulaire input[type="password"] {
+  width: 80%;
+  padding: 12px 15px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  background-color: #f9fafb;
+  transition: all 0.3s ease;
+}
+
+#formulaire input[type="text"]:focus,
+#formulaire input[type="email"]:focus,
+#formulaire input[type="password"]:focus {
+  border-color: #7c3aed;
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  outline: none;
+}
+
+#formulaire input[type="number"] {
+  width: 80%;
+  padding: 12px 15px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  background-color: #f9fafb;
+  transition: all 0.3s ease;
+}
+
+#formulaire input[type="number"]:focus {
+  border-color: #7c3aed;
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  outline: none;
+}
+
+#cat {
+  display: none;
+  width: 80%;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+
+  .case1,
+  .case2,
+  .case4,
+  .case5 {
+    width: 165px;
+  }
+  .case3 {
+    min-width: 500px;
+    width: auto;
+  }
+
+  .case6 {
+    width: 210px;
+    margin: 10px;
+  }
+
+  .case6 a {
+    margin-right: 10px;
+  }
+
+  .renit {
+    margin-top: 15%;
+  }
+
+  .renit a {
+    text-decoration: none;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 12px;
+    transition: 0.3s;
+    background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+  }
+  .renit a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(124, 58, 237, 0.4);
+  }
+
+  .pro {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    margin: 0px 100px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    width: 100%;
+    height: auto;
+  }
+
+  .pros {
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+  }
+  @media (max-width: 1200px) {
+    .colonne {
+      margin: 0 20px;
+    }
+    .hdroite ul {
+      margin-right: 30px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    header {
+      flex-direction: column;
+      height: auto;
+      align-items: flex-start;
+    }
+    .hdroite ul {
+      flex-direction: column;
+      margin-right: 0;
+      padding: 0;
+    }
+    .hdroite ul li {
+      margin: 10px 0;
+    }
+    .colonne {
+      flex-direction: column;
+      margin: 0 10px;
+    }
+    .case1,
+    .case2,
+    .case3,
+    .case4,
+    .case5,
+    .case6 {
+      width: 100% !important;
+      min-width: unset !important;
+      margin: 5px 0;
+    }
+  }
+
+  @media (max-width: 700px) {
+    body {
+      font-size: 15px;
+    }
+    .entt h1,
+    .img_profil h1 {
+      font-size: 22px;
+    }
+    .img_profil img {
+      width: 70px;
+      height: 70px;
+    }
+    #ajouterbtn {
+      margin-right: 10px;
+      width: 90%;
+      font-size: 16px;
+    }
+    form,
+    #formulaire,
+    #cat {
+      width: 95% !important;
+      min-width: unset;
+    }
+    .mtpp {
+      width: 95%;
+    }
+    table {
+      font-size: 14px;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+    }
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+      display: block;
+    }
+    thead {
+      display: none;
+    }
+    tbody tr {
+      margin-bottom: 15px;
+      border-bottom: 2px solid #eee;
+      background: #fff;
+    }
+    tbody td {
+      padding: 8px 5px;
+      border: none;
+      position: relative;
+    }
+    tbody td:before {
+      content: attr(data-label);
+      font-weight: bold;
+      display: block;
+      margin-bottom: 3px;
+      color: #333;
+    }
+    .btn {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .btn-danger,
+    .btn-info {
+      width: 100%;
+      margin-bottom: 5px;
+    }
+    footer {
+      font-size: 13px;
+      height: auto;
+      padding: 10px 0;
+      position: static;
+    }
+  }
+
+  @media (max-width: 500px) {
+    .img_profil img {
+      width: 50px;
+      height: 50px;
+    }
+    .img_profil h1,
+    .entt h1 {
+      font-size: 16px;
+    }
+    .img_profil p {
+      font-size: 14px;
+    }
+    form label,
+    form input,
+    form select,
+    form button {
+      font-size: 14px;
+    }
+  }
+
+  /* Pour rendre les boutons et champs plus accessibles sur mobile */
+  form input,
+  form select,
+  form button {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  /* Pour les boutons d'action */
+  .btn-danger,
+  .btn-info {
+    width: 100%;
+    margin: 5px 0;
+  }
+  /* Pour les liens */
+  .img_profil a {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+  }
+  /* Pour les messages d'erreur */
+  #message {
+    font-size: 14px;
+    padding: 5px;
+    border-radius: 3px;
+  }
+}

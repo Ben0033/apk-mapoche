@@ -7,6 +7,12 @@ Auth::requireLogin(); // Rediriger si non connecté
 $message = '';
 $message_type = '';
 
+// Gérer le message de succès via GET
+if (isset($_GET['success']) && $_GET['success'] == '1') {
+    $message = "Catégorie ajoutée avec succès!";
+    $message_type = 'success';
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     checkCSRF();
     
@@ -40,6 +46,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message_type = 'success';
         
         logAction('CATEGORY_ADDED', ['categorie' => $categorie]);
+        
+        // Rediriger pour éviter la double soumission
+        header('Location: ajoutCat.php?success=1');
+        exit;
     } catch (Exception $e) {
         $message = $e->getMessage();
         $message_type = 'error';
@@ -96,6 +106,20 @@ require_once 'header.php';
                 <?php if (!empty($message)): ?>
                     <div class="message-container">
                         <?= $message_type === 'success' ? displaySuccess($message) : displayError($message) ?>
+                        
+                        <?php if ($message_type === 'success'): ?>
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    // Vider le champ catégorie après ajout réussi
+                                    const form = document.querySelector(".category-form");
+                                    const input = document.getElementById("categorie");
+                                    if (form && input) {
+                                        form.reset();
+                                        input.focus();
+                                    }
+                                });
+                            </script>
+                        <?php endif; ?>
                     </div>
                 <?php endif; ?>
 

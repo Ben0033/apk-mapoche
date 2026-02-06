@@ -15,7 +15,12 @@ define('DB_PASSWORD', getenv('DB_PASSWORD') ?: '');
 define('APP_NAME', 'MaPoche');
 define('APP_DEBUG', getenv('APP_DEBUG') ?: false);
 define('UPLOAD_DIR', __DIR__ . '/../uploads/');
-define('MAX_UPLOAD_SIZE', 2 * 1024 * 1024); // 2 MB
+define('MAX_UPLOAD_SIZE', 5 * 1024 * 1024); // 5 MB
+
+// Currency settings
+define('DEFAULT_CURRENCY', 'XOF'); // Franc CFA
+define('CURRENCY_SYMBOL', 'CFA'); // Symbole affiché
+define('CURRENCY_DECIMALS', 0); // Pas de décimales pour le CFA
 
 // Configuration sécurité
 define('SESSION_TIMEOUT', 3600); // 1 heure

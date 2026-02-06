@@ -28,9 +28,52 @@ try {
 try {
     $expenses_by_category = getExpensesByCategory(Auth::userId());
     $stats = getTransactionStats(Auth::userId());
+    $daily_transactions = getDailyTransactions(Auth::userId(), 30); // 30 derniers jours
 } catch (Exception $e) {
     $expenses_by_category = [];
     $stats = ['total_depenses' => 0, 'total_revenus' => 0];
+    $daily_transactions = [];
+}
+
+// Gérer la requête AJAX pour rafraîchir les données
+if (isset($_GET['refresh']) && $_GET['refresh'] == '1') {
+    header('Content-Type: application/json');
+    
+    try {
+        $expenses_by_category = getExpensesByCategory(Auth::userId());
+        $stats = getTransactionStats(Auth::userId());
+        $daily_transactions = getDailyTransactions(Auth::userId(), 30);
+        
+        echo json_encode([
+            'success' => true,
+            'expenses_by_category' => $expenses_by_category,
+            'daily_transactions' => $daily_transactions,
+            'stats' => $stats
+        ]);
+    } catch (Exception $e) {
+        echo json_encode([
+            'success' => false,
+            'error' => $e->getMessage()
+        ]);
+    }
+    exit;
+}
+
+// Gérer le message de succès via GET
+if (isset($_GET['success']) && $_GET['success'] == '1') {
+    $message = 'Transaction ajoutée avec succès!';
+    $message_type = 'success';
+    
+    // Forcer le rechargement des données
+    try {
+        $expenses_by_category = getExpensesByCategory(Auth::userId());
+        $stats = getTransactionStats(Auth::userId());
+        $daily_transactions = getDailyTransactions(Auth::userId(), 30);
+    } catch (Exception $e) {
+        $expenses_by_category = [];
+        $stats = ['total_depenses' => 0, 'total_revenus' => 0];
+        $daily_transactions = [];
+    }
 }
 
 // Traiter le formulaire
@@ -61,17 +104,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new Exception('Catégorie invalide');
             }
 
-            Database::getInstance()->execute(
+            $result = Database::getInstance()->execute(
                 'INSERT INTO depense (montant_depense, date_depense, description_depense, id_cat, id_user) 
                  VALUES (?, NOW(), ?, ?, ?)',
                 [$montant, $description, $categorie, $id_user]
             );
 
-            $message = '✓ Dépense enregistrée avec succès';
-            $message_type = 'success';
-            logAction('EXPENSE_ADDED', ['montant' => $montant, 'categorie' => $categorie]);
+            if ($result) {
+                $message = '✓ Dépense enregistrée avec succès';
+                $message_type = 'success';
+                
+                // Rediriger pour éviter la double soumission
+                header('Location: index.php?success=1');
+                exit;
+            } else {
+                $message = 'Erreur lors de l\'ajout de la transaction.';
+                $message_type = 'error';
+            }
         } else { // revenu
-            Database::getInstance()->execute(
+            $result = Database::getInstance()->execute(
                 'INSERT INTO revenue (montant_revenu, date_revenu, description_revenu, id_user) 
                  VALUES (?, NOW(), ?, ?)',
                 [$montant, $description, $id_user]
@@ -80,6 +131,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $message = '✓ Revenu enregistré avec succès';
             $message_type = 'success';
             logAction('REVENUE_ADDED', ['montant' => $montant]);
+            
+            // Rediriger pour éviter la double soumission
+            header('Location: index.php?success=1');
+            exit;
         }
 
         // Reset les champs après succès
@@ -108,10 +163,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
         <div class="welcome-section">
-            <h2>Bonjour, <?= htmlspecialchars(Auth::user()['prenom_user'] ?? '') ?></h2>
+            <h2>Bienvenue, <?= htmlspecialchars(Auth::user()['prenom_user']) ?>!</h2>
             <p class="balance-info">
-                <span class="balance-label">Solde Actuel</span><br>
+                <span class="balance-label">Solde actuel</span>
                 <span class="balance-amount"><?= formatAmount($stats['total_revenus'] - $stats['total_depenses']) ?></span>
+            </p>
+            <p class="currency-info">
+                <small>Devise: <?= getCurrencyInfo()['name'] ?> (<?= getCurrencyInfo()['code'] ?>)</small>
             </p>
         </div>
     </header>
@@ -162,6 +220,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </section>
 
+        <!-- Section Histogramme -->
+        <section class="chart-section">
+            <h3>📊 Évolution des revenus et dépenses (30 derniers jours)</h3>
+            <div class="chart-container">
+                <canvas id="dailyChart" width="400" height="200"></canvas>
+            </div>
+            <div class="chart-legend">
+                <div class="legend-item">
+                    <span class="legend-color" style="background: #10B981;"></span>
+                    <span>Revenus</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background: #EF4444;"></span>
+                    <span>Dépenses</span>
+                </div>
+            </div>
+        </section>
+
         <!-- Transaction Form -->
         <section class="transaction-form">
             <form id="formulaire" method="post" action="index.php" enctype="multipart/form-data">
@@ -183,7 +259,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <div class="form-fields">
-                    <input type="number" id="montant" name="montant" class="form-input" placeholder="💶 Montant" style="display: none;" required step="0.01">
+                    <input type="number" id="montant" name="montant" class="form-input" placeholder="Montant (CFA)" style="display: none;" required step="0.01">
 
                     <input type="text" id="description" name="description" class="form-input" placeholder="📝 Description" style="display: none;" required>
 
@@ -204,6 +280,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php if (!empty($message)): ?>
                     <div class="message-container">
                         <?= ($message_type === 'success') ? displaySuccess($message) : displayError($message) ?>
+                        
+                        <?php if ($message_type === 'success'): ?>
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    // Vider tous les champs du formulaire
+                                    const form = document.getElementById("formulaire");
+                                    if (form) {
+                                        form.reset();
+                                        
+                                        // Masquer les champs dynamiques
+                                        document.getElementById("montant").style.display = "none";
+                                        document.getElementById("description").style.display = "none";
+                                        document.getElementById("cat").style.display = "none";
+                                        document.getElementById("ajout").style.display = "none";
+                                        
+                                        // Rafraîchir les graphiques avec les nouvelles données
+                                        setTimeout(() => {
+                                            refreshDataAndCharts();
+                                        }, 500);
+                                    }
+                                });
+                            </script>
+                        <?php endif; ?>
                     </div>
                 <?php endif; ?>
                 
@@ -247,6 +346,7 @@ require_once 'footer.php';
 <script>
 // Données pour le graphique
 const expenseData = <?= json_encode($expenses_by_category) ?>;
+const dailyData = <?= json_encode($daily_transactions) ?>;
 
 // Fonction pour basculer le menu
 function toggleMenu() {
@@ -297,9 +397,52 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Dessiner le graphique circulaire
+    // Dessiner les graphiques
     drawPieChart();
+    drawDailyChart();
 });
+
+// Fonction pour recharger les données via AJAX
+async function refreshDataAndCharts() {
+    try {
+        // Recharger les données depuis le serveur
+        const response = await fetch('index.php?refresh=1');
+        const data = await response.json();
+        
+        // Mettre à jour les variables globales
+        if (data.expenses_by_category) {
+            expenseData = data.expenses_by_category;
+        }
+        if (data.daily_transactions) {
+            dailyData = data.daily_transactions;
+        }
+        
+        // Redessiner les graphiques
+        refreshCharts();
+        
+    } catch (error) {
+        console.error('Erreur lors du rafraîchissement des données:', error);
+    }
+}
+
+// Fonction pour redessiner tous les graphiques
+function refreshCharts() {
+    // Effacer et redessiner le graphique circulaire
+    const pieCanvas = document.getElementById('expenseChart');
+    if (pieCanvas) {
+        const ctx = pieCanvas.getContext('2d');
+        ctx.clearRect(0, 0, pieCanvas.width, pieCanvas.height);
+        drawPieChart();
+    }
+    
+    // Effacer et redessiner l'histogramme
+    const dailyCanvas = document.getElementById('dailyChart');
+    if (dailyCanvas) {
+        const ctx = dailyCanvas.getContext('2d');
+        ctx.clearRect(0, 0, dailyCanvas.width, dailyCanvas.height);
+        drawDailyChart();
+    }
+}
 
 // Fonction pour dessiner le graphique circulaire
 function drawPieChart() {
@@ -365,11 +508,99 @@ function drawPieChart() {
     }
 }
 
+// Fonction pour dessiner l'histogramme des transactions quotidiennes
+function drawDailyChart() {
+    const canvas = document.getElementById('dailyChart');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    
+    if (!dailyData || dailyData.length === 0) {
+        ctx.fillStyle = '#9ca3af';
+        ctx.font = '14px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Aucune donnée disponible', canvas.width / 2, canvas.height / 2);
+        return;
+    }
+    
+    // Configuration du graphique
+    const padding = 40;
+    const chartWidth = canvas.width - 2 * padding;
+    const chartHeight = canvas.height - 2 * padding;
+    const barWidth = chartWidth / (dailyData.length * 2 + 1);
+    const spacing = barWidth / 2;
+    
+    // Trouver les valeurs maximales
+    const maxValue = Math.max(
+        ...dailyData.map(d => Math.max(d.revenue, d.expense))
+    );
+    const scale = maxValue > 0 ? chartHeight / maxValue : 0;
+    
+    // Effacer le canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Dessiner les axes
+    ctx.strokeStyle = '#e5e7eb';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(padding, padding);
+    ctx.lineTo(padding, canvas.height - padding);
+    ctx.lineTo(canvas.width - padding, canvas.height - padding);
+    ctx.stroke();
+    
+    // Dessiner les barres
+    dailyData.forEach((item, index) => {
+        const x = padding + spacing + index * (barWidth * 2 + spacing);
+        
+        // Barre des revenus
+        if (item.revenue > 0) {
+            const revenueHeight = item.revenue * scale;
+            ctx.fillStyle = '#10B981';
+            ctx.fillRect(x, canvas.height - padding - revenueHeight, barWidth, revenueHeight);
+        }
+        
+        // Barre des dépenses
+        if (item.expense > 0) {
+            const expenseHeight = item.expense * scale;
+            ctx.fillStyle = '#EF4444';
+            ctx.fillRect(x + barWidth, canvas.height - padding - expenseHeight, barWidth, expenseHeight);
+        }
+        
+        // Afficher les dates (un jour sur 5 pour éviter la surcharge)
+        if (index % 5 === 0 || index === dailyData.length - 1) {
+            ctx.fillStyle = '#6b7280';
+            ctx.font = '10px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(item.date_formatted, x + barWidth, canvas.height - padding + 15);
+        }
+    });
+    
+    // Afficher les valeurs sur l'axe Y
+    ctx.fillStyle = '#6b7280';
+    ctx.font = '10px Arial';
+    ctx.textAlign = 'right';
+    
+    for (let i = 0; i <= 5; i++) {
+        const value = (maxValue * i / 5);
+        const y = canvas.height - padding - (chartHeight * i / 5);
+        ctx.fillText(formatAmount(value), padding - 5, y + 3);
+        
+        // Lignes horizontales
+        if (i > 0) {
+            ctx.strokeStyle = '#f3f4f6';
+            ctx.beginPath();
+            ctx.moveTo(padding, y);
+            ctx.lineTo(canvas.width - padding, y);
+            ctx.stroke();
+        }
+    }
+}
+
 // Fonction pour formater les montants
 function formatAmount(amount) {
     return new Intl.NumberFormat('fr-FR', {
-        style: 'currency',
-        currency: 'EUR'
-    }).format(amount);
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(amount) + ' CFA';
 }
 </script>
