@@ -249,7 +249,7 @@ body {
 .stats-cards {
     display: flex;
     width: auto;
-    flex-direction: column;
+    /* flex-direction: column; */
     gap: 15px;
     margin-bottom: 25px;
 }

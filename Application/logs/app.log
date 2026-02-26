@@ -155,4 +155,60 @@ Stack trace:
 [05-Feb-2026 23:11:14 UTC] PHP Warning:  Undefined variable $message_type in C:\wamp64\www\apk-mapoche\Application\connexion.php on line 67
 [05-Feb-2026 23:11:14 UTC] PHP Stack trace:
 [05-Feb-2026 23:11:14 UTC] PHP   1. {main}() C:\wamp64\www\apk-mapoche\Application\connexion.php:0
-{"timestamp":"2026-02-05 23:11:28","action":"USER_LOGGED_IN","user_id":3,"ip":"::1","details":{"email":"mpd@modetetendance.com"}}
+{"timestamp":"2026-02-05 23:11:28","action":"USER_LOGGED_IN","user_id":3,"ip":"::1","details":{"email":"mpd@modetetendance.com"}}{"timestamp":"2026-02-08 21:08:10","action":"REGISTRATION_FAILED","user_id":null,"ip":"::1","details":{"error":"Mot de passe: minimum 1 majuscule et 1 chiffre"}}{"timestamp":"2026-02-08 21:08:50","action":"REGISTRATION_FAILED","user_id":null,"ip":"::1","details":{"error":"Les mots de passe ne correspondent pas"}}{"timestamp":"2026-02-08 21:09:21","action":"USER_REGISTERED","user_id":null,"ip":"::1","details":{"email":"lawaliismail597@gmail.com"}}{"timestamp":"2026-02-08 21:09:29","action":"LOGIN_FAILED","user_id":null,"ip":"::1","details":{"email":"lawaliismail597@gmail.com","reason":"password_mismatch"}}[08-Feb-2026 21:09:29 UTC] PHP Warning:  Undefined variable $message_type in C:\wamp\www\apk-mapoche\Application\connexion.php on line 65
+[08-Feb-2026 21:09:29 UTC] PHP Stack trace:
+[08-Feb-2026 21:09:29 UTC] PHP   1. {main}() C:\wamp\www\apk-mapoche\Application\connexion.php:0
+[08-Feb-2026 21:09:29 UTC] PHP Warning:  Undefined variable $message_type in C:\wamp\www\apk-mapoche\Application\connexion.php on line 67
+[08-Feb-2026 21:09:29 UTC] PHP Stack trace:
+[08-Feb-2026 21:09:29 UTC] PHP   1. {main}() C:\wamp\www\apk-mapoche\Application\connexion.php:0
+{"timestamp":"2026-02-08 21:09:45","action":"USER_LOGGED_IN","user_id":1,"ip":"::1","details":{"email":"lawaliismail597@gmail.com"}}{"timestamp":"2026-02-08 21:10:52","action":"REVENUE_ADDED","user_id":1,"ip":"::1","details":{"montant":"10000"}}{"timestamp":"2026-02-08 22:11:08","action":"LOGIN_FAILED","user_id":null,"ip":"::1","details":{"email":"lawaliismail597@gmail.com","reason":"password_mismatch"}}[08-Feb-2026 22:11:08 UTC] PHP Warning:  Undefined variable $message_type in C:\wamp\www\apk-mapoche\Application\connexion.php on line 65
+[08-Feb-2026 22:11:08 UTC] PHP Stack trace:
+[08-Feb-2026 22:11:08 UTC] PHP   1. {main}() C:\wamp\www\apk-mapoche\Application\connexion.php:0
+[08-Feb-2026 22:11:08 UTC] PHP Warning:  Undefined variable $message_type in C:\wamp\www\apk-mapoche\Application\connexion.php on line 67
+[08-Feb-2026 22:11:08 UTC] PHP Stack trace:
+[08-Feb-2026 22:11:08 UTC] PHP   1. {main}() C:\wamp\www\apk-mapoche\Application\connexion.php:0
+{"timestamp":"2026-02-08 22:11:28","action":"USER_LOGGED_IN","user_id":1,"ip":"::1","details":{"email":"lawaliismail597@gmail.com"}}[08-Feb-2026 22:11:44 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method Database::fetch() in C:\wamp\www\apk-mapoche\Application\modifier.php:70
+Stack trace:
+#0 {main}
+  thrown in C:\wamp\www\apk-mapoche\Application\modifier.php on line 70
+{"timestamp":"2026-02-10 09:23:59","action":"LOGIN_FAILED","user_id":null,"ip":"::1","details":{"email":"lawaliismail597@gmail.com","reason":"password_mismatch"}}[10-Feb-2026 09:23:59 UTC] PHP Warning:  Undefined variable $message_type in C:\wamp\www\apk-mapoche\Application\connexion.php on line 65
+[10-Feb-2026 09:23:59 UTC] PHP Stack trace:
+[10-Feb-2026 09:23:59 UTC] PHP   1. {main}() C:\wamp\www\apk-mapoche\Application\connexion.php:0
+[10-Feb-2026 09:23:59 UTC] PHP Warning:  Undefined variable $message_type in C:\wamp\www\apk-mapoche\Application\connexion.php on line 67
+[10-Feb-2026 09:23:59 UTC] PHP Stack trace:
+[10-Feb-2026 09:23:59 UTC] PHP   1. {main}() C:\wamp\www\apk-mapoche\Application\connexion.php:0
+{"timestamp":"2026-02-10 09:24:13","action":"LOGIN_FAILED","user_id":null,"ip":"::1","details":{"email":"lawaliismail597@gmail.com","reason":"password_mismatch"}}[10-Feb-2026 09:24:13 UTC] PHP Warning:  Undefined variable $message_type in C:\wamp\www\apk-mapoche\Application\connexion.php on line 65
+[10-Feb-2026 09:24:13 UTC] PHP Stack trace:
+[10-Feb-2026 09:24:13 UTC] PHP   1. {main}() C:\wamp\www\apk-mapoche\Application\connexion.php:0
+[10-Feb-2026 09:24:13 UTC] PHP Warning:  Undefined variable $message_type in C:\wamp\www\apk-mapoche\Application\connexion.php on line 67
+[10-Feb-2026 09:24:13 UTC] PHP Stack trace:
+[10-Feb-2026 09:24:13 UTC] PHP   1. {main}() C:\wamp\www\apk-mapoche\Application\connexion.php:0
+{"timestamp":"2026-02-10 09:24:15","action":"LOGIN_FAILED","user_id":null,"ip":"::1","details":{"email":"lawaliismail597@gmail.com","reason":"password_mismatch"}}[10-Feb-2026 09:24:15 UTC] PHP Warning:  Undefined variable $message_type in C:\wamp\www\apk-mapoche\Application\connexion.php on line 65
+[10-Feb-2026 09:24:15 UTC] PHP Stack trace:
+[10-Feb-2026 09:24:15 UTC] PHP   1. {main}() C:\wamp\www\apk-mapoche\Application\connexion.php:0
+[10-Feb-2026 09:24:15 UTC] PHP Warning:  Undefined variable $message_type in C:\wamp\www\apk-mapoche\Application\connexion.php on line 67
+[10-Feb-2026 09:24:15 UTC] PHP Stack trace:
+[10-Feb-2026 09:24:15 UTC] PHP   1. {main}() C:\wamp\www\apk-mapoche\Application\connexion.php:0
+{"timestamp":"2026-02-10 09:24:20","action":"LOGIN_FAILED","user_id":null,"ip":"::1","details":{"email":"lawaliismail597@gmail.com","reason":"password_mismatch"}}[10-Feb-2026 09:24:20 UTC] PHP Warning:  Undefined variable $message_type in C:\wamp\www\apk-mapoche\Application\connexion.php on line 65
+[10-Feb-2026 09:24:20 UTC] PHP Stack trace:
+[10-Feb-2026 09:24:20 UTC] PHP   1. {main}() C:\wamp\www\apk-mapoche\Application\connexion.php:0
+[10-Feb-2026 09:24:20 UTC] PHP Warning:  Undefined variable $message_type in C:\wamp\www\apk-mapoche\Application\connexion.php on line 67
+[10-Feb-2026 09:24:20 UTC] PHP Stack trace:
+[10-Feb-2026 09:24:20 UTC] PHP   1. {main}() C:\wamp\www\apk-mapoche\Application\connexion.php:0
+[2026-02-10 09:24:37] ERROR - Query failed: SQLSTATE[42S22]: Column not found: 1054 Champ 'reset_token' inconnu dans field list | SQL: UPDATE users SET reset_token = ?, reset_token_expiry = ? WHERE id_user = ?{"timestamp":"2026-02-10 09:24:37","action":"PASSWORD_RESET_FAILED","user_id":null,"ip":"::1","details":{"email":"lawaliismail597@gmail.com","error":"SQLSTATE[42S22]: Column not found: 1054 Champ 'reset_token' inconnu dans field list"}}{"timestamp":"2026-02-10 09:25:29","action":"USER_LOGGED_IN","user_id":1,"ip":"::1","details":{"email":"lawaliismail597@gmail.com"}}{"timestamp":"2026-02-10 09:43:48","action":"TRANSACTION_FAILED","user_id":1,"ip":"::1","details":{"error":"Cat\u00e9gorie invalide"}}[10-Feb-2026 09:52:56 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method Database::fetch() in C:\wamp\www\apk-mapoche\Application\modifier.php:70
+Stack trace:
+#0 {main}
+  thrown in C:\wamp\www\apk-mapoche\Application\modifier.php on line 70
+{"timestamp":"2026-02-16 12:58:52","action":"USER_LOGGED_IN","user_id":1,"ip":"::1","details":{"email":"lawaliismail597@gmail.com"}}{"timestamp":"2026-02-16 13:02:01","action":"USER_LOGGED_IN","user_id":1,"ip":"::1","details":{"email":"lawaliismail597@gmail.com"}}{"timestamp":"2026-02-16 13:02:17","action":"LOGIN_FAILED","user_id":null,"ip":"::1","details":{"email":"lawaliismail597@gmail.com","reason":"password_mismatch"}}[16-Feb-2026 13:02:17 UTC] PHP Warning:  Undefined variable $message_type in C:\wamp\www\apk-mapoche\Application\connexion.php on line 65
+[16-Feb-2026 13:02:17 UTC] PHP Stack trace:
+[16-Feb-2026 13:02:17 UTC] PHP   1. {main}() C:\wamp\www\apk-mapoche\Application\connexion.php:0
+[16-Feb-2026 13:02:17 UTC] PHP Warning:  Undefined variable $message_type in C:\wamp\www\apk-mapoche\Application\connexion.php on line 67
+[16-Feb-2026 13:02:17 UTC] PHP Stack trace:
+[16-Feb-2026 13:02:17 UTC] PHP   1. {main}() C:\wamp\www\apk-mapoche\Application\connexion.php:0
+{"timestamp":"2026-02-16 13:02:35","action":"LOGIN_FAILED","user_id":null,"ip":"::1","details":{"email":"lawaliismail597@gmail.com","reason":"password_mismatch"}}[16-Feb-2026 13:02:35 UTC] PHP Warning:  Undefined variable $message_type in C:\wamp\www\apk-mapoche\Application\connexion.php on line 65
+[16-Feb-2026 13:02:35 UTC] PHP Stack trace:
+[16-Feb-2026 13:02:35 UTC] PHP   1. {main}() C:\wamp\www\apk-mapoche\Application\connexion.php:0
+[16-Feb-2026 13:02:35 UTC] PHP Warning:  Undefined variable $message_type in C:\wamp\www\apk-mapoche\Application\connexion.php on line 67
+[16-Feb-2026 13:02:35 UTC] PHP Stack trace:
+[16-Feb-2026 13:02:35 UTC] PHP   1. {main}() C:\wamp\www\apk-mapoche\Application\connexion.php:0
+{"timestamp":"2026-02-16 13:02:40","action":"USER_LOGGED_IN","user_id":1,"ip":"::1","details":{"email":"lawaliismail597@gmail.com"}}{"timestamp":"2026-02-16 13:03:16","action":"USER_LOGGED_IN","user_id":1,"ip":"::1","details":{"email":"lawaliismail597@gmail.com"}}{"timestamp":"2026-02-26 13:15:11","action":"USER_LOGGED_IN","user_id":1,"ip":"::1","details":{"email":"lawaliismail597@gmail.com"}}

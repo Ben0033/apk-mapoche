@@ -211,32 +211,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </section>
 
-        <!-- Chart Section -->
-        <section class="chart-section">
-            <h3>Dépenses par Catégorie</h3>
-            <div class="chart-container">
-                <canvas id="expenseChart" width="300" height="300"></canvas>
-                <div id="chartLegend" class="chart-legend"></div>
-            </div>
-        </section>
+        <div class="chartes">
+              <!-- Chart Section -->
+            <section class="chart-section">
+                <h3>Dépenses par Catégorie</h3>
+                <div class="chart-container">
+                    <canvas id="expenseChart" width="300" height="300"></canvas>
+                    <div id="chartLegend" class="chart-legend"></div>
+                </div>
+            </section>
 
-        <!-- Section Histogramme -->
-        <section class="chart-section">
-            <h3>📊 Évolution des revenus et dépenses (30 derniers jours)</h3>
-            <div class="chart-container">
-                <canvas id="dailyChart" width="400" height="200"></canvas>
-            </div>
-            <div class="chart-legend">
-                <div class="legend-item">
-                    <span class="legend-color" style="background: #10B981;"></span>
-                    <span>Revenus</span>
+            <!-- Section Histogramme -->
+            <section class="chart-section">
+                <h3>📊 Évolution des revenus et dépenses (30 derniers jours)</h3>
+                <div class="chart-container">
+                    <canvas id="dailyChart" width="400" height="200"></canvas>
                 </div>
-                <div class="legend-item">
-                    <span class="legend-color" style="background: #EF4444;"></span>
-                    <span>Dépenses</span>
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #10B981;"></span>
+                        <span>Revenus</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #EF4444;"></span>
+                        <span>Dépenses</span>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </div>
 
         <!-- Transaction Form -->
         <section class="transaction-form">
